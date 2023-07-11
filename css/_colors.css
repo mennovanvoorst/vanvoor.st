@@ -1,0 +1,14 @@
+:root {
+    --accent: 18, 194, 233;
+    --accent-gradient: linear-gradient(to right, #12c2e9, #c471ed, #f64f59);
+    --white: #fff;
+    --light: #e5e7eb;
+    --typescript: #3178C6;
+    --react: #61DAFB;
+    --nextjs: #61DAFB;
+    --nodejs: #339933;
+    --tailwind: #06B6D4;
+    --stencil: #5530ff;
+    --vuejs: #4FC08D;
+    --nginx: #009639;
+}

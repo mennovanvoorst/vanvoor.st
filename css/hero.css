@@ -1,0 +1,63 @@
+.hero {
+  padding-top: 8rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hero__avatar {
+  width: 96px;
+  height: 96px;
+  display: block;
+	border-radius: 100%;
+  margin-bottom: 2rem;
+}
+
+.hero__title {
+  margin: 0;
+}
+
+.hero__subtitle {
+  margin: 0 0 0.5rem 0;
+}
+
+.hero__description {
+  margin: 0;
+  padding: 2rem 0;
+}
+
+.social {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+}
+
+.social__link {
+  position: relative;
+  padding-right: 1rem;
+}
+
+.social__link a svg {
+  width: 32px;
+  height: 32px;
+  fill: var(--white);
+}
+
+.social__link a:hover svg {
+  fill: rgb(var(--accent));
+}
+
+.social__link::after {
+  content: "";
+  width: 1px;
+  height: 100%;
+  position: absolute;
+  background: #52525b;
+  right: 0;
+  top: 0;
+}
+
+.social__link:last-child::after {
+  display: none;
+}

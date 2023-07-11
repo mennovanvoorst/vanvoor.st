@@ -1,0 +1,53 @@
+.skills {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  margin-top: 2rem;
+}
+
+.skills__item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.skills__logo {
+    width: 32px;
+    height: 32px;
+}
+
+.skills__logo--typescript {
+    fill: var(--typescript);
+}
+
+.skills__logo--react {
+    fill: var(--react);
+}
+
+.skills__logo--nextjs {
+    fill: var(--nextjs);
+}
+
+.skills__logo--nodejs {
+    fill: var(--nodejs);
+}
+
+.skills__logo--tailwind {
+    fill: var(--tailwind);
+}
+
+.skills__logo--stencil {
+    fill: var(--stencil);
+}
+
+.skills__logo--vuejs{
+    fill: var(--vuejs);
+}
+
+.skills__logo--nginx {
+    fill: var(--nginx);
+}
+
+.skills__title {
+    margin: 0;
+}

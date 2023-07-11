@@ -1,0 +1,30 @@
+.companies {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  gap: 16px;
+}
+
+.companies__item {
+  display: flex;
+  gap: 16px;
+}
+
+.companies__logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+}
+
+.companies__title, .companies__date {
+    margin: 0;
+}
+
+.companies__info {
+    display: flex;
+    flex-direction: column;
+}
+
+.companies__description {
+    margin: 0.5rem 0 0 0;
+}

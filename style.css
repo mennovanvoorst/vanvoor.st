@@ -1,0 +1,53 @@
+@import "normalize.css";
+@import "_reset.css";
+@import "_colors.css";
+@import "_animations.css";
+@import "_typography.css";
+@import "_containers.css";
+@import "hero.css";
+@import "skills.css";
+@import "experience.css";
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont,
+    “Segoe UI”, “Roboto”, “Oxygen”,
+    “Ubuntu”, “Cantarell”, “Fira Sans”,
+    “Droid Sans”, “Helvetica Neue”, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  height: 100%;
+  background-color: #18181b;
+  color: #fff;
+}
+
+.highlight {
+  font-size: 0.875em;
+  font-weight: bold;
+  background: rgba(var(--accent), 12%);
+  color: rgb(var(--accent));
+  border-radius: 4px;
+  padding: 0.3em 0.45em;
+}
+
+.text-gradient {
+  background-image: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 400% 400%;
+  animation: gradient 6s ease infinite;
+}
+
+.spacer {
+  margin: 2rem auto;
+  height: 1px;
+  width: 75%;
+  background: #27272a;
+
+  @media (min-width: 768px) {
+    margin: 3rem auto;
+  }
+
+  @media (min-width: 992px) {
+    margin: 4rem auto;
+  }
+}
