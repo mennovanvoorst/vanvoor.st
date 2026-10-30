@@ -2,7 +2,7 @@
 
 The personal site of Menno van Voorst, software engineer and product builder.
 
-Live at **[vanvoor.st](https://www.vanvoor.st/)**.
+Live at **[vanvoor.st](https://vanvoor.st/)**.
 
 It's one page, there's no build step and no framework, and nothing gets tracked. HTML, CSS and a bit of JavaScript, the way the web was when I first started poking at it.
 
