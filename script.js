@@ -165,6 +165,26 @@ if (fossil) {
   });
 }
 
+/* Work squares pop in, one after the other, once the list is on screen. */
+if (!reducedMotion && "IntersectionObserver" in window) {
+  const lists = document.querySelectorAll(".work");
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add("in");
+        observer.unobserve(entry.target);
+      }
+    },
+    { threshold: 0.2 },
+  );
+  lists.forEach((list) => {
+    list.querySelectorAll("li").forEach((li, i) => li.style.setProperty("--i", i));
+    observer.observe(list);
+  });
+  document.documentElement.classList.add("js");
+}
+
 /* Miss me? */
 const title = document.title;
 document.addEventListener("visibilitychange", () => {

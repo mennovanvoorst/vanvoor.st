@@ -44,6 +44,8 @@
 * { box-sizing: border-box; }
 ::selection { background: var(--mustard); color: #1c1a17; }
 html { font-size: 17px; }
+@media (min-width: 90rem) { html { font-size: 19px; } }
+@media (min-width: 120rem) { html { font-size: 20px; } }
 body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--bg); }
 
 main,
@@ -105,14 +107,21 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--sky); outline-o
   border-radius: 3px;
   background: var(--c);
   transform: rotate(12deg);
+  transition: transform 0.5s cubic-bezier(.3, 1.6, .5, 1) calc(var(--i, 0) * 70ms);
 }
+/* Squares pop in when the list scrolls into view, and do a little spin on hover. */
+.js .work li::before { transform: scale(0) rotate(-120deg); }
+.js .work.in li::before { transform: rotate(12deg); }
+.work li:hover::before,
+.js .work.in li:hover::before { transform: rotate(102deg) scale(1.3); transition-delay: 0s; }
 .work li:nth-child(5n + 1) { --c: var(--tomato); }
 .work li:nth-child(5n + 2) { --c: var(--mustard); }
 .work li:nth-child(5n + 3) { --c: var(--leaf); }
 .work li:nth-child(5n + 4) { --c: var(--sky); }
 .work li:nth-child(5n + 5) { --c: var(--grape); }
 .work b { font-weight: 700; }
-.work small { margin-left: 0.3rem; color: var(--muted); font-size: 0.8rem; }.work span { display: block; color: var(--muted); }
+.work small { margin-left: 0.3rem; color: var(--muted); font-size: 0.8rem; }
+.work span { display: block; color: var(--muted); }
 
 /* How */
 .loop { display: flex; flex-wrap: wrap; gap: 0.4rem 0.5rem; font-weight: 700; }
@@ -197,5 +206,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--sky); outline-o
   .avatar, .avatar:hover { transition: none; transform: none; }
   .dino { left: auto; right: 1rem; animation: none; }
   .dino svg, .dino .leg, .fossil svg { animation: none; }
+  .work li::before { transition: none; }
+  .js .work li::before { transform: rotate(12deg); }
   .dino .say { opacity: 1; animation: none; }
 }
