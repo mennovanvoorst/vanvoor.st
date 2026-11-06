@@ -24,7 +24,8 @@ index.html     the page
 404.html       where lost visitors end up
 style.css      every style, light and dark
 script.js      the cursor trail and a few surprises
-fonts/         Bricolage Grotesque, self-hosted (no Google calls)
+fonts/         Bricolage Grotesque and Silkscreen, self-hosted (no Google calls)
+me-pixel.png   hi 👋, in 32×32
 me.jpg         hi 👋
 favicon.svg    🦕
 robots.txt     the welcome mat for crawlers

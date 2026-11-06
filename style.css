@@ -5,12 +5,25 @@
   font-display: swap;
   src: url("fonts/bricolage-latin.woff2") format("woff2");
 }
+@font-face {
+  font-family: "Silkscreen";
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/silkscreen-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Silkscreen";
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/silkscreen-700.woff2") format("woff2");
+}
 
 :root {
   --bg: #fffaf0;
   --ink: #1c1a17;
   --muted: #6f6a60;
   --rule: #ece4d3;
+  --link: #c93a17;
 
   --tomato: #f2542d;
   --mustard: #f5b700;
@@ -18,9 +31,7 @@
   --sky: #3a86ff;
   --grape: #a07aff;
 
-  --hl-mustard: 55%;
-  --hl-leaf: 40%;
-  --hl-sky: 35%;
+  --pixel: "Silkscreen", "Courier New", monospace;
 
   color: var(--ink);
   background: var(--bg);
@@ -31,14 +42,11 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #15130f;
+    --bg: #12110e;
     --ink: #f5efe3;
     --muted: #a39d90;
     --rule: #2e2a23;
-
-    --hl-mustard: 70%;
-    --hl-leaf: 75%;
-    --hl-sky: 75%;
+    --link: #ff7a59;
   }
 }
 * { box-sizing: border-box; }
@@ -47,6 +55,7 @@ html { font-size: 17px; }
 @media (min-width: 90rem) { html { font-size: 19px; } }
 @media (min-width: 120rem) { html { font-size: 20px; } }
 body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--bg); }
+svg, .avatar img { image-rendering: pixelated; }
 
 main,
 .footer { width: min(100% - 3rem, 36rem); margin: 0 auto; }
@@ -55,78 +64,70 @@ main { padding: 4rem 0 2rem; line-height: 1.55; }
 /* Intro */
 .intro { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2.5rem; }
 .avatar {
+  position: relative;
   flex: none;
   width: 5.5rem;
   height: 5.5rem;
-  padding: 4px;
-  border: 0;
-  border-radius: 50%;
-  background: conic-gradient(var(--tomato), var(--mustard), var(--leaf), var(--sky), var(--grape), var(--tomato));
+  padding: 0;
+  border: 3px solid var(--ink);
+  background: var(--ink);
   cursor: pointer;
   touch-action: manipulation;
-  transition: transform 0.3s cubic-bezier(.3, 1.6, .5, 1);
 }
+.avatar img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+/* Hover to "enhance": the sharp photo comes through in a few chunky steps. */
+.avatar .hd { opacity: 0; image-rendering: auto; transition: opacity 0.4s steps(4); }
 @media (hover: hover) {
-  .avatar:hover { transform: rotate(-6deg) scale(1.04); }
+  .avatar:hover .hd { opacity: 1; }
 }
-.avatar img { display: block; width: 100%; height: 100%; border: 3px solid var(--bg); border-radius: 50%; object-fit: cover; }
-.intro h1 { margin: 0; font-size: 1.75rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
-.intro p { margin: 0.3rem 0 0; color: var(--muted); }
+.intro h1 { margin: 0; font: 700 1.5rem/1.15 var(--pixel); }
+.intro p { margin: 0.35rem 0 0; color: var(--muted); }
 
 /* Text */
 h1, h2, p { margin: 0 0 1.25rem; font-size: 1rem; font-weight: 400; }
 .lead { font-size: 1.25rem; line-height: 1.4; font-weight: 600; letter-spacing: -0.01em; }
 h2 {
-  margin: 3rem 0 1rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
+  margin: 3rem 0 1.1rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 3px solid var(--mustard);
+  font: 700 0.85rem/1.2 var(--pixel);
 }
-a { color: inherit; text-decoration-color: var(--tomato); text-underline-offset: 0.15em; text-decoration-thickness: 2px; }
-a:hover { color: var(--tomato); }
-a:focus-visible, button:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
+h2::before { content: "– "; }
+a { color: var(--link); text-decoration-color: currentColor; text-underline-offset: 0.15em; text-decoration-thickness: 2px; }
+a:hover { background: var(--link); color: var(--bg); text-decoration: none; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
 .muted { color: var(--muted); }
 
-.hl { padding: 0 0.1em; }
-.hl.mustard { background: linear-gradient(transparent 55%, color-mix(in srgb, var(--mustard) var(--hl-mustard), transparent) 55%); }
-.hl.leaf { background: linear-gradient(transparent 55%, color-mix(in srgb, var(--leaf) var(--hl-leaf), transparent) 55%); }
-.hl.sky { background: linear-gradient(transparent 55%, color-mix(in srgb, var(--sky) var(--hl-sky), transparent) 55%); }
+.hl { padding: 0 0.15em; color: #1c1a17; }
+.hl.mustard { background: var(--mustard); }
+.hl.leaf { background: var(--leaf); }
+.hl.sky { background: var(--sky); }
 
-/* Work */
+/* Work: every project gets its own little pixel icon. */
 .work { margin: 0 0 1.25rem; padding: 0; list-style: none; }
-.work li { position: relative; margin: 0 0 1.1rem; padding-left: 1.4rem; }
-.work li::before {
-  content: "";
+.work li { position: relative; margin: 0 0 1.2rem; padding-left: 2.1rem; }
+.work .icon {
   position: absolute;
   left: 0;
-  top: 0.45em;
-  width: 0.6rem;
-  height: 0.6rem;
-  border-radius: 3px;
-  background: var(--c);
-  transform: rotate(12deg);
-  transition: transform 0.5s cubic-bezier(.3, 1.6, .5, 1) calc(var(--i, 0) * 70ms);
+  top: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--ink);
+  transition: transform 0.3s steps(3) calc(var(--i, 0) * 90ms);
 }
-/* Squares pop in when the list scrolls into view, and do a little spin on hover. */
-.js .work li::before { transform: scale(0) rotate(-120deg); }
-.js .work.in li::before { transform: rotate(12deg); }
-.work li:hover::before,
-.js .work.in li:hover::before { transform: rotate(102deg) scale(1.3); transition-delay: 0s; }
-.work li:nth-child(5n + 1) { --c: var(--tomato); }
-.work li:nth-child(5n + 2) { --c: var(--mustard); }
-.work li:nth-child(5n + 3) { --c: var(--leaf); }
-.work li:nth-child(5n + 4) { --c: var(--sky); }
-.work li:nth-child(5n + 5) { --c: var(--grape); }
-.work b { font-weight: 700; }
-.work small { margin-left: 0.3rem; color: var(--muted); font-size: 0.8rem; }
+/* Icons pop in when the list scrolls into view, and hop on hover. */
+.js .work .icon { transform: scale(0); }
+.js .work.in .icon { transform: none; }
+.work li:hover .icon,
+.js .work.in li:hover .icon { transform: translateY(-3px); transition: transform 0.15s steps(2); }
+.work b { font: 700 0.8rem/1 var(--pixel); }
+.work small { margin-left: 0.35rem; color: var(--muted); font-size: 0.8rem; }
 .work span { display: block; color: var(--muted); }
 
 /* How */
-.loop { display: flex; flex-wrap: wrap; gap: 0.4rem 0.5rem; font-weight: 700; }
-.loop span { color: var(--muted); white-space: nowrap; }
-.loop b { padding: 0.1rem 0.6rem; border-radius: 999px; background: var(--rule); color: var(--ink); white-space: nowrap; }
+.loop { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font: 700 0.75rem/1 var(--pixel); }
+.loop span { display: flex; align-items: center; gap: 0.5rem; color: var(--muted); white-space: nowrap; }
+.loop b { padding: 0.35rem 0.55rem; background: var(--rule); color: var(--ink); white-space: nowrap; }
 .loop .tomato { background: var(--tomato); color: #1c1a17; }
 .loop .mustard { background: var(--mustard); color: #1c1a17; }
 .loop .leaf { background: var(--leaf); color: #1c1a17; }
@@ -137,7 +138,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--sky); outline-o
 .footer {
   margin-bottom: 3rem;
   padding-top: 1rem;
-  border-top: 2px dashed var(--rule);
+  background: repeating-linear-gradient(90deg, var(--rule) 0 6px, transparent 6px 12px) top / 100% 3px no-repeat;
   color: var(--muted);
   font-size: 0.9rem;
 }
@@ -149,12 +150,12 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--sky); outline-o
   main { padding-top: 2.5rem; }
   .intro { gap: 1rem; }
   .avatar { width: 4.5rem; height: 4.5rem; }
-  .intro h1 { font-size: 1.4rem; }
+  .intro h1 { font-size: 1.2rem; }
 }
 
 /* 404 */
 .lost { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 3rem 0; }
-.lost h1 { margin-bottom: 0.75rem; font-size: 2rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+.lost h1 { margin-bottom: 0.75rem; font: 700 1.6rem/1.15 var(--pixel); }
 .fossil {
   width: 11rem;
   min-height: 7rem;
@@ -164,49 +165,47 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--sky); outline-o
   background: none;
   cursor: pointer;
   touch-action: manipulation;
-  transform: rotate(-4deg);
 }
-.fossil svg { display: block; width: 100%; animation: dino-bob 1.2s ease-in-out infinite alternate; }
+.fossil svg { display: block; width: 100%; animation: dino-bob 0.8s steps(1) infinite; }
 
 /* Cursor trail */
 .trail { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
 
-/* Dino */
+/* Dino: a two-frame walk cycle. */
 .dino {
   position: fixed;
   bottom: 0;
   left: 100vw;
   z-index: 20;
-  width: 140px;
+  width: 144px;
   pointer-events: none;
-  animation: dino-walk 9s linear forwards;
+  animation: dino-walk 9s steps(90) forwards;
 }
-.dino svg { display: block; width: 100%; animation: dino-bob 0.4s ease-in-out infinite alternate; }
-.dino .leg { transform-box: fill-box; transform-origin: top center; animation: dino-step 0.4s ease-in-out infinite alternate; }
-.dino .leg.b { animation-direction: alternate-reverse; }
+.dino svg { display: block; width: 100%; animation: dino-bob 0.4s steps(1) infinite; }
+.dino .frame-a { animation: frame-a 0.4s steps(1) infinite; }
+.dino .frame-b { opacity: 0; animation: frame-b 0.4s steps(1) infinite; }
 .dino .say {
   position: absolute;
-  top: -1.6rem;
+  top: -1.9rem;
   left: -0.5rem;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
   background: var(--ink);
   color: var(--bg);
-  font-weight: 800;
-  font-size: 0.95rem;
+  font: 700 0.75rem/1.2 var(--pixel);
   opacity: 0;
-  animation: dino-say 9s linear forwards;
+  animation: dino-say 9s steps(1) forwards;
 }
 @keyframes dino-walk { to { left: -160px; } }
-@keyframes dino-bob { to { transform: translateY(-3px); } }
-@keyframes dino-step { from { transform: rotate(-14deg); } to { transform: rotate(14deg); } }
+@keyframes dino-bob { 50% { transform: translateY(-4px); } }
+@keyframes frame-a { 50% { opacity: 0; } }
+@keyframes frame-b { 50% { opacity: 1; } }
 @keyframes dino-say { 0%, 30% { opacity: 0; } 34%, 60% { opacity: 1; } 64%, 100% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .avatar, .avatar:hover { transition: none; transform: none; }
+  .avatar .hd { transition: none; }
   .dino { left: auto; right: 1rem; animation: none; }
-  .dino svg, .dino .leg, .fossil svg { animation: none; }
-  .work li::before { transition: none; }
-  .js .work li::before { transform: rotate(12deg); }
+  .dino svg, .dino .frame-a, .dino .frame-b, .fossil svg { animation: none; }
+  .work .icon { transition: none; }
+  .js .work .icon { transform: none; }
   .dino .say { opacity: 1; animation: none; }
 }

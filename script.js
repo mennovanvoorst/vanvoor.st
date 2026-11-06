@@ -30,7 +30,7 @@ if (!reducedMotion && matchMedia("(pointer: fine)").matches) {
     const dist = last ? Math.hypot(x - last.x, y - last.y) : Infinity;
 
     if (dinoMode) {
-      if (dist < 26) return;
+      if (dist < 28) return;
       const angle = last ? Math.atan2(y - last.y, x - last.x) : 0;
       const side = step++ % 2 ? 1 : -1;
       particles.push({
@@ -41,13 +41,13 @@ if (!reducedMotion && matchMedia("(pointer: fine)").matches) {
         life: 1,
       });
     } else {
-      if (dist < 4) return;
+      if (dist < 8) return;
       particles.push({
         x,
         y,
         vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6 + 0.3,
-        r: 3 + Math.random() * 3,
+        vy: (Math.random() - 0.5) * 0.6 + 0.4,
+        size: Math.random() < 0.5 ? 4 : 8,
         color: colors[step++ % colors.length],
         life: 1,
       });
@@ -59,23 +59,23 @@ if (!reducedMotion && matchMedia("(pointer: fine)").matches) {
     }
   });
 
+  // Everything snaps to a 4px grid, so the trail looks like it came out of an old console.
+  const snap = (v) => Math.round(v / 4) * 4;
+
   function drawFoot(p) {
-    ctx.save();
-    ctx.translate(p.x, p.y);
-    ctx.rotate(p.angle);
-    ctx.globalAlpha = p.life * 0.8;
-    ctx.strokeStyle = "#2fa36b";
-    ctx.lineWidth = 2.5;
-    ctx.lineCap = "round";
-    ctx.beginPath();
-    for (const a of [-0.6, 0, 0.6]) {
-      ctx.moveTo(0, 0);
-      ctx.lineTo(Math.cos(a) * 9, Math.sin(a) * 9);
+    ctx.globalAlpha = Math.ceil(p.life * 4) / 5;
+    ctx.fillStyle = "#2fa36b";
+    const x = snap(p.x);
+    const y = snap(p.y);
+    ctx.fillRect(x - 4, y - 4, 8, 8);
+    // three toes, pointing where the dino was heading
+    const dx = Math.round(Math.cos(p.angle));
+    const dy = Math.round(Math.sin(p.angle));
+    for (const s of [-1, 0, 1]) {
+      const tx = x + dx * 8 + (dy ? s * 6 : 0);
+      const ty = y + dy * 8 + (dx ? s * 6 : 0);
+      ctx.fillRect(tx - 2, ty - 2, 4, 4);
     }
-    ctx.moveTo(0, 0);
-    ctx.lineTo(-4, 0);
-    ctx.stroke();
-    ctx.restore();
   }
 
   function tick() {
@@ -92,11 +92,10 @@ if (!reducedMotion && matchMedia("(pointer: fine)").matches) {
       } else {
         p.x += p.vx;
         p.y += p.vy;
-        ctx.globalAlpha = p.life;
+        ctx.globalAlpha = 1;
         ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
-        ctx.fill();
+        const s = p.life > 0.5 ? p.size : 4;
+        ctx.fillRect(snap(p.x) - s / 2, snap(p.y) - s / 2, s, s);
       }
     }
     ctx.globalAlpha = 1;
@@ -105,21 +104,51 @@ if (!reducedMotion && matchMedia("(pointer: fine)").matches) {
   }
 }
 
-/* Dino. Type "rawr" or "dino", or poke the photo three times. */
+/* Dino. Type "rawr" or "dino", or poke the photo three times. Drawn one pixel at a time. */
+const dinoPalette = { G: "#2fa36b", D: "#1f7a4d", Y: "#f5b700", K: "#1c1a17", P: "#f2849c", W: "#f5efe3" };
+const dinoBody = [
+  "...GGGGGG...............",
+  "..GGGGGGGG..............",
+  "..GGWKGGGG..............",
+  "..GGKKGGGG.....Y..Y..Y..",
+  "..GGGGGGGG....YY.YY.YY..",
+  "..PGGGGGGG...GGGGGGGGG..",
+  "..KKKKGGGG..GGGGGGGGGGG.",
+  "......GGGGGGGGGGGGGGGGGG",
+  ".....DGGGGGGGGGGGGGGGGGG",
+  ".....D.GGGGGGGGGGGGG..GG",
+  "........GGGGGGGGGGG.....",
+];
+const legsA = [
+  "........GG......DD......",
+  "........GG......DD......",
+  "........GGG.....DDD.....",
+];
+const legsB = [
+  "........DD......GG......",
+  "........DD......GG......",
+  "........DDD.....GGG.....",
+];
+
+function pixels(rows, top = 0) {
+  let out = "";
+  rows.forEach((row, y) => {
+    for (let x = 0; x < row.length; ) {
+      const ch = row[x];
+      let w = 1;
+      while (row[x + w] === ch) w++;
+      if (dinoPalette[ch]) out += `<rect x="${x}" y="${y + top}" width="${w}" height="1" fill="${dinoPalette[ch]}"/>`;
+      x += w;
+    }
+  });
+  return out;
+}
+
 const dinoSvg = `
-<svg viewBox="0 0 140 90" aria-hidden="true">
-  <g class="leg b"><rect x="72" y="58" width="11" height="24" rx="5" fill="#25865a"/></g>
-  <g class="leg b"><rect x="44" y="58" width="11" height="24" rx="5" fill="#25865a"/></g>
-  <path d="M86 46 C108 44 124 52 138 64 C118 64 100 62 86 60 Z" fill="#2fa36b"/>
-  <path d="M46 36 l6-11 6 11 M60 32 l7-12 7 12 M76 34 l6-11 6 11" fill="#f5b700" stroke="#f5b700" stroke-width="3" stroke-linejoin="round"/>
-  <ellipse cx="66" cy="50" rx="28" ry="18" fill="#2fa36b"/>
-  <path d="M44 44 C36 36 32 30 30 22 L42 18 C44 28 50 34 56 38 Z" fill="#2fa36b"/>
-  <ellipse cx="30" cy="18" rx="16" ry="11" fill="#2fa36b"/>
-  <circle cx="24" cy="15" r="2.6" fill="#1c1a17"/>
-  <circle cx="28" cy="22" r="2.4" fill="#f2849c" opacity=".7"/>
-  <path d="M15 22 q5 3 10 1" fill="none" stroke="#1c1a17" stroke-width="1.6" stroke-linecap="round"/>
-  <g class="leg"><rect x="78" y="58" width="11" height="24" rx="5" fill="#2fa36b"/></g>
-  <g class="leg"><rect x="50" y="58" width="11" height="24" rx="5" fill="#2fa36b"/></g>
+<svg viewBox="0 0 24 14" shape-rendering="crispEdges" aria-hidden="true">
+  ${pixels(dinoBody)}
+  <g class="frame-a">${pixels(legsA, 11)}</g>
+  <g class="frame-b">${pixels(legsB, 11)}</g>
 </svg>`;
 
 function releaseDino() {
@@ -193,6 +222,6 @@ document.addEventListener("visibilitychange", () => {
 
 console.log(
   "%c🦕 Hi, curious one. View source is how I started too.\n%cpsst: type rawr",
-  "font: 700 14px system-ui; color: #2fa36b",
-  "font: 12px system-ui; color: #6f6a60",
+  "font: 700 14px monospace; color: #2fa36b",
+  "font: 12px monospace; color: #a39d90",
 );
