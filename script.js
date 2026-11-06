@@ -64,7 +64,7 @@ if (!reducedMotion && matchMedia("(pointer: fine)").matches) {
 
   function drawFoot(p) {
     ctx.globalAlpha = Math.ceil(p.life * 4) / 5;
-    ctx.fillStyle = "#2fa36b";
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--trex") || "#535353";
     const x = snap(p.x);
     const y = snap(p.y);
     ctx.fillRect(x - 4, y - 4, 8, 8);
@@ -104,40 +104,64 @@ if (!reducedMotion && matchMedia("(pointer: fine)").matches) {
   }
 }
 
-/* Dino. Type "rawr" or "dino", or poke the photo three times. Drawn one pixel at a time. */
-const dinoPalette = { G: "#2fa36b", D: "#1f7a4d", Y: "#f5b700", K: "#1c1a17", P: "#f2849c", W: "#f5efe3" };
-const dinoBody = [
-  "...GGGGGG...............",
-  "..GGGGGGGG..............",
-  "..GGWKGGGG..............",
-  "..GGKKGGGG.....Y..Y..Y..",
-  "..GGGGGGGG....YY.YY.YY..",
-  "..PGGGGGGG...GGGGGGGGG..",
-  "..KKKKGGGG..GGGGGGGGGGG.",
-  "......GGGGGGGGGGGGGGGGGG",
-  ".....DGGGGGGGGGGGGGGGGGG",
-  ".....D.GGGGGGGGGGGGG..GG",
-  "........GGGGGGGGGGG.....",
+/* Dino. Type "rawr" or "dino", or poke my name three times.
+   It's the T-Rex from Chrome's offline page (Chromium, BSD licence), two running frames. */
+const trexRun1 = [
+  "...........########.",
+  "..........##########",
+  "..........##.#######",
+  "..........##########",
+  "..........##########",
+  "..........##########",
+  "..........#####.....",
+  "..........########..",
+  "#........#####......",
+  "#.......######......",
+  "##....##########....",
+  "###..#########.#....",
+  "##############......",
+  "##############......",
+  ".############.......",
+  "..###########.......",
+  "...#########........",
+  "....#######.........",
+  ".....###..###.......",
+  ".....##.............",
+  ".....#..............",
+  ".....##.............",
 ];
-const legsA = [
-  "........GG......DD......",
-  "........GG......DD......",
-  "........GGG.....DDD.....",
-];
-const legsB = [
-  "........DD......GG......",
-  "........DD......GG......",
-  "........DDD.....GGG.....",
+const trexRun2 = [
+  "...........########.",
+  "..........##########",
+  "..........##.#######",
+  "..........##########",
+  "..........##########",
+  "..........##########",
+  "..........#####.....",
+  "..........########..",
+  "#........#####......",
+  "#.......######......",
+  "##....##########....",
+  "###..#########.#....",
+  "##############......",
+  "##############......",
+  ".############.......",
+  "..###########.......",
+  "...#########........",
+  "....#######.........",
+  ".....##..##.........",
+  "......##..#.........",
+  "..........#.........",
+  "..........##........",
 ];
 
-function pixels(rows, top = 0) {
+function pixels(rows) {
   let out = "";
   rows.forEach((row, y) => {
     for (let x = 0; x < row.length; ) {
-      const ch = row[x];
       let w = 1;
-      while (row[x + w] === ch) w++;
-      if (dinoPalette[ch]) out += `<rect x="${x}" y="${y + top}" width="${w}" height="1" fill="${dinoPalette[ch]}"/>`;
+      while (row[x + w] === row[x]) w++;
+      if (row[x] === "#") out += `<rect x="${x}" y="${y}" width="${w}" height="1"/>`;
       x += w;
     }
   });
@@ -145,10 +169,9 @@ function pixels(rows, top = 0) {
 }
 
 const dinoSvg = `
-<svg viewBox="0 0 24 14" shape-rendering="crispEdges" aria-hidden="true">
-  ${pixels(dinoBody)}
-  <g class="frame-a">${pixels(legsA, 11)}</g>
-  <g class="frame-b">${pixels(legsB, 11)}</g>
+<svg viewBox="0 0 20 22" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true">
+  <g class="frame-a">${pixels(trexRun1)}</g>
+  <g class="frame-b">${pixels(trexRun2)}</g>
 </svg>`;
 
 function releaseDino() {
@@ -171,9 +194,9 @@ addEventListener("keydown", (e) => {
   if (typed === "rawr" || typed === "dino") releaseDino();
 });
 
-const avatar = document.querySelector(".avatar");
+const nameEl = document.querySelector(".intro h1");
 let pokes = [];
-avatar?.addEventListener("click", () => {
+nameEl?.addEventListener("click", () => {
   const now = Date.now();
   pokes = pokes.filter((t) => now - t < 1200).concat(now);
   if (pokes.length >= 3) {
@@ -222,6 +245,6 @@ document.addEventListener("visibilitychange", () => {
 
 console.log(
   "%c🦕 Hi, curious one. View source is how I started too.\n%cpsst: type rawr",
-  "font: 700 14px monospace; color: #2fa36b",
+  "font: 700 14px monospace; color: #535353",
   "font: 12px monospace; color: #a39d90",
 );

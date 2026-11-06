@@ -49,7 +49,7 @@ Yes, it's basically a sandwich.
 <summary>Spoilers, obviously.</summary>
 
 - Type `rawr` or `dino` anywhere on the page.
-- Poke the photo three times, fast.
+- Poke my name three times, fast.
 - While the dino is out, your cursor leaves footprints.
 - Switch to another tab and back again.
 - Open the console.
@@ -64,3 +64,5 @@ Upload the files to any static host. Netlify, Vercel, Cloudflare Pages and GitHu
 ---
 
 Made with care, taste and a lot of help from AI. No dinosaurs were harmed.
+
+The T-Rex comes from Chrome's offline page: © The Chromium Authors, [BSD licence](https://chromium.googlesource.com/chromium/src/+/main/LICENSE).

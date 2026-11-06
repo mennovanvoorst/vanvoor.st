@@ -24,6 +24,7 @@
   --muted: #6f6a60;
   --rule: #ece4d3;
   --link: #c93a17;
+  --trex: #535353;
 
   --tomato: #f2542d;
   --mustard: #f5b700;
@@ -47,6 +48,7 @@
     --muted: #a39d90;
     --rule: #2e2a23;
     --link: #ff7a59;
+    --trex: #acacac;
   }
 }
 * { box-sizing: border-box; }
@@ -62,37 +64,8 @@ main,
 main { padding: 4rem 0 2rem; line-height: 1.55; }
 
 /* Intro */
-.intro { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2.5rem; }
-.avatar {
-  flex: none;
-  width: 5.5rem;
-  height: 5.5rem;
-  padding: 3px;
-  border: 0;
-  background: var(--ink);
-  cursor: pointer;
-  touch-action: manipulation;
-  /* Stepped corners, like a sprite. */
-  --s: 4px;
-  clip-path: polygon(
-    calc(var(--s) * 2) 0, calc(100% - var(--s) * 2) 0,
-    calc(100% - var(--s) * 2) var(--s), calc(100% - var(--s)) var(--s),
-    calc(100% - var(--s)) calc(var(--s) * 2), 100% calc(var(--s) * 2),
-    100% calc(100% - var(--s) * 2), calc(100% - var(--s)) calc(100% - var(--s) * 2),
-    calc(100% - var(--s)) calc(100% - var(--s)), calc(100% - var(--s) * 2) calc(100% - var(--s)),
-    calc(100% - var(--s) * 2) 100%, calc(var(--s) * 2) 100%,
-    calc(var(--s) * 2) calc(100% - var(--s)), var(--s) calc(100% - var(--s)),
-    var(--s) calc(100% - var(--s) * 2), 0 calc(100% - var(--s) * 2),
-    0 calc(var(--s) * 2), var(--s) calc(var(--s) * 2),
-    var(--s) var(--s), calc(var(--s) * 2) var(--s)
-  );
-  transition: transform 0.15s steps(2);
-}
-@media (hover: hover) {
-  .avatar:hover { transform: translateY(-4px); }
-}
-.avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.intro h1 { margin: 0; font: 700 1.5rem/1.15 var(--pixel); }
+.intro { margin-bottom: 2.5rem; }
+.intro h1 { margin: 0; font: 700 1.75rem/1.15 var(--pixel); cursor: default; }
 .intro p { margin: 0.35rem 0 0; color: var(--muted); }
 
 /* Text */
@@ -160,17 +133,15 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 @media (max-width: 34rem) {
   main, .footer { width: min(100% - 2rem, 36rem); }
   main { padding-top: 2.5rem; }
-  .intro { gap: 1rem; }
-  .avatar { width: 4.5rem; height: 4.5rem; }
-  .intro h1 { font-size: 1.2rem; }
+  .intro h1 { font-size: 1.35rem; }
 }
 
 /* 404 */
 .lost { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 3rem 0; }
 .lost h1 { margin-bottom: 0.75rem; font: 700 1.6rem/1.15 var(--pixel); }
 .fossil {
-  width: 11rem;
-  min-height: 7rem;
+  width: 7rem;
+  color: var(--trex);
   margin: 0 0 1.5rem;
   padding: 0;
   border: 0;
@@ -178,18 +149,20 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
   cursor: pointer;
   touch-action: manipulation;
 }
-.fossil svg { display: block; width: 100%; animation: dino-bob 0.8s steps(1) infinite; }
+.fossil svg { display: block; width: 100%; }
+.fossil .frame-b { display: none; }
 
 /* Cursor trail */
 .trail { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
 
-/* Dino: a two-frame walk cycle. */
+/* Dino: Chrome's T-Rex, running left to right on its two frames. */
 .dino {
   position: fixed;
   bottom: 0;
-  left: 100vw;
+  left: -120px;
   z-index: 20;
-  width: 144px;
+  width: 100px;
+  color: var(--trex);
   pointer-events: none;
   animation: dino-walk 9s steps(90) forwards;
 }
@@ -199,7 +172,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 .dino .say {
   position: absolute;
   top: -1.9rem;
-  left: -0.5rem;
+  right: -1.5rem;
   padding: 0.2rem 0.5rem;
   background: var(--ink);
   color: var(--bg);
@@ -207,16 +180,14 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
   opacity: 0;
   animation: dino-say 9s steps(1) forwards;
 }
-@keyframes dino-walk { to { left: -160px; } }
+@keyframes dino-walk { to { left: 100vw; } }
 @keyframes dino-bob { 50% { transform: translateY(-4px); } }
 @keyframes frame-a { 50% { opacity: 0; } }
 @keyframes frame-b { 50% { opacity: 1; } }
 @keyframes dino-say { 0%, 30% { opacity: 0; } 34%, 60% { opacity: 1; } 64%, 100% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .avatar { transition: none; }
-  .avatar:hover { transform: none; }
-  .dino { left: auto; right: 1rem; animation: none; }
+  .dino { left: 1rem; animation: none; }
   .dino svg, .dino .frame-a, .dino .frame-b, .fossil svg { animation: none; }
   .work .icon { transition: none; }
   .js .work .icon { transform: none; }
