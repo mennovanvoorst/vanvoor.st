@@ -25,7 +25,6 @@ index.html     the page
 style.css      every style, light and dark
 script.js      the cursor trail and a few surprises
 fonts/         Bricolage Grotesque and Silkscreen, self-hosted (no Google calls)
-me-pixel.png   hi 👋, in 32×32
 me.jpg         hi 👋
 favicon.svg    🦕
 robots.txt     the welcome mat for crawlers
