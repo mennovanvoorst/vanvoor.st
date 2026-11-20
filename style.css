@@ -42,7 +42,7 @@
   text-rendering: optimizeLegibility;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #12110e;
     --ink: #f5efe3;
     --muted: #a39d90;
@@ -50,6 +50,17 @@
     --link: #ff7a59;
     --trex: #acacac;
   }
+}
+/* Picked with the theme button; overrides the system setting. */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #12110e;
+  --ink: #f5efe3;
+  --muted: #a39d90;
+  --rule: #2e2a23;
+  --link: #ff7a59;
+  --trex: #acacac;
 }
 * { box-sizing: border-box; }
 ::selection { background: var(--mustard); color: #1c1a17; }
@@ -64,7 +75,29 @@ main,
 main { padding: 4rem 0 2rem; line-height: 1.55; }
 
 /* Intro */
-.intro { margin-bottom: 2.5rem; }
+.intro { position: relative; margin-bottom: 2.5rem; }
+
+/* Language: both are in the HTML, the one that doesn't match <html lang> is hidden. */
+:root:not([lang="nl"]) [data-l="nl"],
+:root[lang="nl"] [data-l="en"] { display: none !important; }
+.toggles { position: absolute; top: 0; right: 0; display: flex; gap: 0.4rem; }
+.toggles button {
+  display: inline-flex;
+  align-items: center;
+  height: 1.6rem;
+  padding: 0 0.55rem;
+  border: 0;
+  background: var(--rule);
+  color: var(--ink);
+  font: 700 0.75rem/1 var(--pixel);
+  cursor: pointer;
+}
+.toggles button[hidden] { display: none; }
+.toggles button:hover { background: var(--mustard); color: #1c1a17; }
+.theme svg { width: 0.9rem; height: 0.9rem; }
+.theme[data-show="sun"] .moon,
+.theme[data-show="moon"] .sun { display: none; }
+.intro h1 { padding-right: 6rem; }
 .intro h1 { margin: 0; font: 700 1.75rem/1.15 var(--pixel); cursor: default; }
 .intro p { margin: 0.35rem 0 0; color: var(--muted); }
 
@@ -107,7 +140,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 .js .work.in li:hover .icon { transform: translateY(-3px); transition: transform 0.15s steps(2); }
 .work b { font: 700 0.8rem/1 var(--pixel); }
 .work small { margin-left: 0.35rem; color: var(--muted); font-size: 0.8rem; }
-.work span { display: block; color: var(--muted); }
+.work li > span { display: block; color: var(--muted); }
 
 /* How */
 .loop { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font: 700 0.75rem/1 var(--pixel); }
@@ -148,13 +181,15 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 :root { --px: 3px; --ground: 12px; }
 .has-scene body { padding-bottom: calc(var(--scene-h) + 1rem); }
 :root.has-scene { --scene-h: calc(76 * var(--px) + var(--ground)); }
-.scene { position: fixed; inset: auto 0 0; z-index: 20; height: 0; color: var(--trex); pointer-events: none; }
+.scene { position: fixed; inset: auto 0 0; z-index: 20; height: 0; overflow-x: clip; color: var(--trex); pointer-events: none; }
 .ground {
   position: absolute;
   inset: auto 0 0;
   height: var(--ground);
   border-top: 2px solid var(--trex);
   background: var(--bg);
+  pointer-events: auto;
+  cursor: pointer;
 }
 /* Pebbles and bumps under the horizon, like the offline page. */
 .ground::after {
@@ -165,9 +200,21 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='97' height='8'%3E%3Cpath d='M4 1h2v2H4zM23 4h4v2h-4zM41 2h2v2h-2zM58 5h2v2h-2zM70 1h4v2h-4zM88 4h2v2h-2z'/%3E%3C/svg%3E") repeat-x;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='97' height='8'%3E%3Cpath d='M4 1h2v2H4zM23 4h4v2h-4zM41 2h2v2h-2zM58 5h2v2h-2zM70 1h4v2h-4zM88 4h2v2h-2z'/%3E%3C/svg%3E") repeat-x;
 }
-.tree { position: absolute; bottom: calc(var(--ground) - var(--px)); display: block; height: auto; image-rendering: pixelated; }
-.tree.oak { left: 2vw; width: calc(72 * var(--px)); }
-.tree.elm { right: 3vw; width: calc(56 * var(--px)); }
+/* Two old trees, drawn in the T-Rex grey. Click one to shake it. */
+.tree {
+  position: absolute;
+  bottom: calc(var(--ground) - var(--px));
+  display: block;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.tree.oak { left: 2vw; width: calc(72 * var(--px)); height: calc(64 * var(--px)); }
+.tree.elm { right: 3vw; width: calc(56 * var(--px)); height: calc(76 * var(--px)); }
+.tree.shaken { animation: rustle 0.4s steps(4); }
+@keyframes rustle {
+  25%, 75% { transform: translateX(var(--px)); }
+  50% { transform: translateX(calc(-1 * var(--px))); }
+}
 
 .dino {
   position: absolute;
@@ -181,9 +228,13 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 .dino svg { display: block; width: 100%; }
 .dino.left svg { transform: scaleX(-1); }
 /* Standing still: first frame. Walking: alternate the two running frames. */
-.dino .frame-b { opacity: 0; }
+.dino .frame-b, .dino .frame-c { opacity: 0; }
 .dino.walking .frame-a { animation: frame-a 0.3s steps(1) infinite; }
 .dino.walking .frame-b { animation: frame-b 0.3s steps(1) infinite; }
+.dino.running .frame-a, .dino.running .frame-b { animation-duration: 0.14s; }
+/* Hit: Chrome's crash face. */
+.dino.crashed .frame-a, .dino.crashed .frame-b { visibility: hidden; }
+.dino.crashed .frame-c { opacity: 1; }
 .dino.talking svg { animation: hop 0.3s steps(2) 2; }
 .dino .say {
   position: absolute;
@@ -206,11 +257,81 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
   border-top-color: var(--ink);
 }
 .dino.talking .say { visibility: visible; }
+.dino.edge-left .say { left: 0; transform: none; }
+.dino.edge-left .say::after { left: 12px; }
+.dino.edge-right .say { left: auto; right: 0; transform: none; }
+.dino.edge-right .say::after { left: auto; right: 12px; }
 @keyframes frame-a { 50% { opacity: 0; } }
 @keyframes frame-b { 50% { opacity: 1; } }
 @keyframes hop { 50% { transform: translateY(calc(-3 * var(--px))); } }
 .dino.left.talking svg { animation-name: hop-left; }
 @keyframes hop-left { from, to { transform: scaleX(-1); } 50% { transform: scaleX(-1) translateY(calc(-3 * var(--px))); } }
+
+/* The night sky: little stars that twinkle, just for looking at. */
+.night { position: fixed; inset: 0; pointer-events: none; }
+.speck { position: absolute; color: var(--trex); opacity: 0.6; animation: glimmer 5s steps(1) infinite; }
+.speck svg { display: block; width: 100%; }
+@keyframes glimmer { 45% { opacity: 0.15; } 55% { opacity: 0.6; } }
+
+/* The yellow star, top right. Don't click it. */
+.star {
+  position: fixed;
+  top: 1.25rem;
+  right: 3vw;
+  width: calc(9 * var(--px) + 12px);
+  padding: 6px;
+  border: 0;
+  background: none;
+  color: var(--mustard);
+  cursor: pointer;
+  pointer-events: auto;
+  animation: twinkle 2.4s steps(1) infinite;
+}
+.star svg { display: block; width: 100%; }
+.star:hover { animation: none; transform: scale(1.2); }
+@keyframes twinkle { 60% { opacity: 0.35; } 70% { opacity: 1; } 80% { opacity: 0.35; } }
+
+/* The asteroid, the effects canvas, the crater, and the shake when it lands. */
+.fx { position: fixed; inset: 0; z-index: 25; pointer-events: none; }
+.asteroid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 26;
+  width: calc(16 * var(--px));
+  height: calc(16 * var(--px));
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--trex);
+  cursor: crosshair;
+}
+.asteroid::before { content: ""; position: absolute; inset: -14px; }
+.asteroid svg { display: block; width: 100%; height: 100%; }
+.crater {
+  position: absolute;
+  bottom: calc(var(--ground) - 3 * var(--px));
+  width: calc(14 * var(--px));
+  animation: settle 12s steps(4) forwards;
+}
+.crater svg { display: block; width: 100%; }
+.crater::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(2 * var(--px));
+  right: calc(2 * var(--px));
+  height: 2px;
+  background: var(--bg);
+}
+@keyframes settle { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
+.shake main, .shake .footer, .shake .tree, .shake .ground { animation: quake 0.45s steps(5); }
+@keyframes quake {
+  20% { transform: translate(-4px, 2px); }
+  40% { transform: translate(4px, -2px); }
+  60% { transform: translate(-2px, 2px); }
+  80% { transform: translate(2px, 0); }
+}
 
 /* Smaller screens: smaller pixels, and the trees lean in from the edges. */
 @media (max-width: 64rem) {
@@ -224,10 +345,12 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
   .scene { position: relative; height: var(--scene-h); margin-top: 1rem; }
   .tree.oak { left: calc(-6 * var(--px)); }
   .tree.elm { right: calc(-4 * var(--px)); }
+  .night { position: absolute; }
+  .star { position: absolute; top: 0; left: calc(50% - 4.5 * var(--px) - 6px); right: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dino.walking .frame-a, .dino.walking .frame-b, .dino.talking svg { animation: none; }
+  .dino.walking .frame-a, .dino.walking .frame-b, .dino.talking svg, .star, .speck, .tree.shaken { animation: none; }
   .work .icon { transition: none; }
   .js .work .icon { transform: none; }
 }

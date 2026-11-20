@@ -27,7 +27,6 @@ script.js      the cursor trail and a few surprises
 fonts/         Bricolage Grotesque and Silkscreen, self-hosted (no Google calls)
 me.jpg         hi 👋
 favicon.svg    🦕
-tree-*.svg     two old trees for the dino to wander between
 robots.txt     the welcome mat for crawlers
 sitemap.xml    a very short map
 ```
@@ -51,6 +50,8 @@ Yes, it's basically a sandwich.
 
 - Type `rawr` or `dino` anywhere on the page.
 - Poke my name three times, fast. Or poke the dino.
+- Click a tree, or the ground.
+- Click the star, or type `boom`. Then click fast.
 - Switch to another tab and back again.
 - Open the console.
 - Visit a page that doesn't exist.

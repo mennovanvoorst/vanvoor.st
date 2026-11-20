@@ -56,6 +56,18 @@
         }
       }
     </script>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+        } catch (e) {}
+        var l;
+        try { l = localStorage.getItem("lang"); } catch (e) {}
+        l = l || (navigator.language || "").slice(0, 2).toLowerCase();
+        if (l === "nl") document.documentElement.lang = "nl";
+      })();
+    </script>
     <link rel="preload" href="fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="fonts/silkscreen-700.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="style.css" />
@@ -63,73 +75,91 @@
   <body>
     <main>
       <header class="intro">
+        <div class="toggles">
+          <button class="theme" type="button" hidden><svg class="moon" viewBox="0 0 9 9" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><rect x="3" y="0" width="3" height="1"/><rect x="2" y="1" width="3" height="1"/><rect x="1" y="2" width="3" height="1"/><rect x="1" y="3" width="3" height="1"/><rect x="1" y="4" width="3" height="1"/><rect x="1" y="5" width="4" height="1"/><rect x="2" y="6" width="6" height="1"/><rect x="3" y="7" width="4" height="1"/></svg><svg class="sun" viewBox="0 0 9 9" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><rect x="4" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="3" y="2" width="3" height="1"/><rect x="2" y="3" width="5" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="2" y="4" width="5" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="2" y="5" width="5" height="1"/><rect x="3" y="6" width="3" height="1"/><rect x="1" y="7" width="1" height="1"/><rect x="7" y="7" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/></svg></button>
+          <button class="lang" type="button" hidden>NL</button>
+        </div>
         <h1>Menno van Voorst</h1>
-        <p>Software engineer &amp; product builder, based in Kortenhoef, near Hilversum.</p>
+        <p data-l="en">Software engineer &amp; product builder in Kortenhoef, near Hilversum.</p>
+        <p data-l="nl" lang="nl">Software engineer &amp; product builder in Kortenhoef, bij Hilversum.</p>
       </header>
 
-      <p class="lead">I build software products, from <span class="hl mustard">the first sketch</span> to something people actually use.</p>
+      <p class="lead" data-l="en">I build software products, from <span class="hl mustard">the first sketch</span> to something people use.</p>
+      <p class="lead" data-l="nl" lang="nl">Ik bouw softwareproducten, van <span class="hl mustard">de eerste schets</span> tot iets wat mensen gebruiken.</p>
 
-      <p>I wrote my first code when I was twelve and never really stopped. Later I studied Communication &amp; Multimedia Design in Utrecht, which taught me the other half of the job: figuring out <span class="hl leaf">what to build</span>, for whom, and what to leave out.</p>
+      <p data-l="en">I wrote my first code when I was twelve and never really stopped. Later I studied Communication &amp; Multimedia Design in Utrecht. That&#39;s where I learned the other half of the job: deciding <span class="hl leaf">what to build</span>, for whom, and what to leave out.</p>
+      <p data-l="nl" lang="nl">Mijn eerste code schreef ik toen ik twaalf was, en ik ben eigenlijk nooit gestopt. Later studeerde ik Communication &amp; Multimedia Design in Utrecht. Daar leerde ik de andere helft van het vak: bepalen <span class="hl leaf">wat je bouwt</span>, voor wie, en wat je weglaat.</p>
 
-      <p>That turns out to be the useful half now that AI writes most of the code. It writes most of mine, too: Kieskeurig.nl and PeerPep are largely built by AI these days, with me steering. I also use it to dig through data when a call needs numbers.</p>
+      <p data-l="en">These days AI writes a lot of my code, so I spend more of my time on that other half. I decide how things fit together, what goes first and when it&#39;s ready to ship. I&#39;m usually early to spot where a project is going to get hard. And I like sitting next to users, seeing where they get stuck, and <span class="hl sky">sticking with it</span> until it works.</p>
+      <p data-l="nl" lang="nl">Tegenwoordig schrijft AI een flink deel van mijn code, dus ik besteed meer tijd aan die andere helft. Ik bepaal hoe alles in elkaar past, wat eerst komt en wanneer iets live kan. Meestal zie ik vroeg waar een project lastig gaat worden. En ik zit graag naast gebruikers, kijk waar ze vastlopen en <span class="hl sky">ga door</span> tot het werkt.</p>
 
-      <p>The calls themselves stay with me: how it fits together, what matters most, and when it's good enough to ship. And AI can't sit next to a user, notice where they get stuck, and <span class="hl sky">stick with it</span> until it works. That's the part I enjoy most.</p>
+      <p data-l="en">I&#39;m a software engineer, but I think a lot like a product designer.</p>
+      <p data-l="nl" lang="nl">Ik ben software engineer, maar ik denk vaak als een productontwerper.</p>
 
-      <p>So I'm a software engineer who thinks like a product designer. Or the other way around, depending on the day.</p>
-
-      <h2>Work</h2>
+      <h2 data-l="en">Work</h2>
+      <h2 data-l="nl" lang="nl">Werk</h2>
 
       <ul class="work">
         <li>
           <svg class="icon" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="4" y="0" width="4" height="1" fill="#3c3d8a"/><rect x="2" y="1" width="8" height="1" fill="#3c3d8a"/><rect x="1" y="2" width="4" height="1" fill="#3c3d8a"/><rect x="5" y="2" width="2" height="1" fill="#ffffff"/><rect x="7" y="2" width="4" height="1" fill="#3c3d8a"/><rect x="1" y="3" width="4" height="1" fill="#3c3d8a"/><rect x="5" y="3" width="2" height="1" fill="#ffffff"/><rect x="7" y="3" width="4" height="1" fill="#3c3d8a"/><rect x="0" y="4" width="12" height="1" fill="#3c3d8a"/><rect x="0" y="5" width="4" height="1" fill="#3c3d8a"/><rect x="4" y="5" width="3" height="1" fill="#ffffff"/><rect x="7" y="5" width="5" height="1" fill="#3c3d8a"/><rect x="0" y="6" width="5" height="1" fill="#3c3d8a"/><rect x="5" y="6" width="2" height="1" fill="#ffffff"/><rect x="7" y="6" width="5" height="1" fill="#3c3d8a"/><rect x="0" y="7" width="5" height="1" fill="#3c3d8a"/><rect x="5" y="7" width="2" height="1" fill="#ffffff"/><rect x="7" y="7" width="5" height="1" fill="#3c3d8a"/><rect x="1" y="8" width="4" height="1" fill="#3c3d8a"/><rect x="5" y="8" width="2" height="1" fill="#ffffff"/><rect x="7" y="8" width="4" height="1" fill="#3c3d8a"/><rect x="1" y="9" width="3" height="1" fill="#3c3d8a"/><rect x="4" y="9" width="4" height="1" fill="#ffffff"/><rect x="8" y="9" width="3" height="1" fill="#3c3d8a"/><rect x="2" y="10" width="8" height="1" fill="#3c3d8a"/><rect x="4" y="11" width="4" height="1" fill="#3c3d8a"/></svg>
-          <b>Reshift Digital</b> <small>2024 – now</small>
-          <span>Pretty much everything on <a href="https://www.kieskeurig.nl/" target="_blank" rel="noopener">Kieskeurig.nl</a>, a Dutch product comparison site, and its growing family abroad, like <a href="https://www.comparigo.fr/" target="_blank" rel="noopener">Comparigo.fr</a> and <a href="https://www.comparigo.de/" target="_blank" rel="noopener">Comparigo.de</a>: front end, back end, and a bit of design along the way.</span>
+          <b>Reshift Digital</b> <small><span data-l="en">2024 – now</span><span data-l="nl" lang="nl">2024 – nu</span></small>
+          <span data-l="en"><a href="https://www.kieskeurig.nl/" target="_blank" rel="noopener">Kieskeurig.nl</a>, a Dutch price comparison site, and its sister sites abroad like <a href="https://www.comparigo.fr/" target="_blank" rel="noopener">Comparigo.fr</a> and <a href="https://www.comparigo.de/" target="_blank" rel="noopener">Comparigo.de</a>. I built the front end and look after the C# backend that turns about 2,000 retailer feeds into a catalogue of more than 15 million products and 150 million prices. There&#39;s some Node and a bit of design in there too. Recently I rebuilt the pipeline that adds new products: from a nightly batch of 100k that failed half the time to about 800k a day, at roughly 75% lower LLM cost.</span>
+          <span data-l="nl" lang="nl"><a href="https://www.kieskeurig.nl/" target="_blank" rel="noopener">Kieskeurig.nl</a>, een Nederlandse vergelijkingssite, en de zustersites in het buitenland, zoals <a href="https://www.comparigo.fr/" target="_blank" rel="noopener">Comparigo.fr</a> en <a href="https://www.comparigo.de/" target="_blank" rel="noopener">Comparigo.de</a>. Ik bouwde de front end en beheer de C#-backend die zo&#39;n 2.000 feeds van winkels omzet in een catalogus van ruim 15 miljoen producten en 150 miljoen prijzen. Daarnaast wat Node en af en toe wat design. Onlangs heb ik de pijplijn voor nieuwe producten omgebouwd: van een nachtelijke batch van 100k die de helft van de keren mislukte naar zo&#39;n 800k per dag, tegen ongeveer 75% lagere LLM-kosten.</span>
         </li>
         <li>
           <svg class="icon" viewBox="0 0 10 10" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="6" height="1" fill="#d6334d"/><rect x="1" y="1" width="7" height="1" fill="#d6334d"/><rect x="1" y="2" width="1" height="1" fill="#d6334d"/><rect x="2" y="2" width="4" height="1" fill="#ffffff"/><rect x="6" y="2" width="3" height="1" fill="#d6334d"/><rect x="1" y="3" width="7" height="1" fill="#d6334d"/><rect x="1" y="4" width="6" height="1" fill="#d6334d"/><rect x="3" y="5" width="6" height="1" fill="#2bb3a8"/><rect x="2" y="6" width="7" height="1" fill="#2bb3a8"/><rect x="1" y="7" width="3" height="1" fill="#2bb3a8"/><rect x="4" y="7" width="4" height="1" fill="#ffffff"/><rect x="8" y="7" width="1" height="1" fill="#2bb3a8"/><rect x="2" y="8" width="7" height="1" fill="#2bb3a8"/><rect x="3" y="9" width="6" height="1" fill="#2bb3a8"/></svg>
-          <b><a href="https://peerpep.eu/" target="_blank" rel="noopener">PeerPep</a></b> <small>2022 – now, freelance</small>
-          <span>Group challenges for neighbourhoods, classes and clubs. Nobody wins alone, and the reward waits at the shop around the corner. I designed and built the platform, and now lead the developers and shape what comes next.</span>
+          <b><a href="https://peerpep.eu/" target="_blank" rel="noopener">PeerPep</a></b> <small><span data-l="en">2022 – now, freelance</span><span data-l="nl" lang="nl">2022 – nu, freelance</span></small>
+          <span data-l="en">Group challenges for neighbourhoods, classes and clubs. Everyone works towards the goal together, and the reward is waiting at a local shop. I designed and built the platform, and I&#39;m still the only developer. Together with the owner I look at how to improve the app, and I build new features from start to finish.</span>
+          <span data-l="nl" lang="nl">Groepsuitdagingen voor buurten, klassen en clubs. Je werkt samen naar een doel toe en de beloning ligt klaar bij een winkel in de buurt. Ik heb het platform ontworpen en gebouwd, en ik ben nog steeds de enige developer. Samen met de eigenaar kijk ik hoe de app beter kan, en nieuwe functies bouw ik van begin tot eind.</span>
         </li>
         <li>
           <svg class="icon" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="3" y="0" width="2" height="1" fill="#00c300"/><rect x="7" y="0" width="2" height="1" fill="#00c300"/><rect x="2" y="1" width="1" height="1" fill="#00c300"/><rect x="5" y="1" width="2" height="1" fill="#00c300"/><rect x="9" y="1" width="1" height="1" fill="#00c300"/><rect x="1" y="2" width="1" height="1" fill="#00c300"/><rect x="10" y="2" width="1" height="1" fill="#00c300"/><rect x="0" y="3" width="1" height="1" fill="#00c300"/><rect x="3" y="3" width="1" height="1" fill="#00c300"/><rect x="5" y="3" width="2" height="1" fill="#00c300"/><rect x="8" y="3" width="1" height="1" fill="#00c300"/><rect x="11" y="3" width="1" height="1" fill="#00c300"/><rect x="0" y="4" width="1" height="1" fill="#00c300"/><rect x="3" y="4" width="6" height="1" fill="#00c300"/><rect x="11" y="4" width="1" height="1" fill="#00c300"/><rect x="1" y="5" width="1" height="1" fill="#00c300"/><rect x="3" y="5" width="6" height="1" fill="#00c300"/><rect x="10" y="5" width="1" height="1" fill="#00c300"/><rect x="1" y="6" width="1" height="1" fill="#00c300"/><rect x="3" y="6" width="6" height="1" fill="#00c300"/><rect x="10" y="6" width="1" height="1" fill="#00c300"/><rect x="0" y="7" width="1" height="1" fill="#00c300"/><rect x="11" y="7" width="1" height="1" fill="#00c300"/><rect x="0" y="8" width="1" height="1" fill="#00c300"/><rect x="11" y="8" width="1" height="1" fill="#00c300"/><rect x="1" y="9" width="1" height="1" fill="#00c300"/><rect x="10" y="9" width="1" height="1" fill="#00c300"/><rect x="2" y="10" width="1" height="1" fill="#00c300"/><rect x="5" y="10" width="2" height="1" fill="#00c300"/><rect x="9" y="10" width="1" height="1" fill="#00c300"/><rect x="3" y="11" width="2" height="1" fill="#00c300"/><rect x="7" y="11" width="2" height="1" fill="#00c300"/></svg>
-          <b>KPN</b> <small>2021 – 2023, via Ordina and Saxum</small>
-          <span>Self-service tools in the KPN app and website that talk to your modem, so you can fix it yourself: building new ones, rescuing old ones, and testing all of it.</span>
+          <b>KPN</b> <small><span data-l="en">2021 – 2023, via Ordina and Saxum</span><span data-l="nl" lang="nl">2021 – 2023, via Ordina en Saxum</span></small>
+          <span data-l="en">Self-service tools in the KPN app and website that connect to a customer&#39;s modem, so people can fix problems without calling support. I turned designs for long, multi-step flows into StencilJS web components. They read device data through an API and pick the next step from it, including polling to see when a modem is back online. I also moved older tools from Angular and React to StencilJS and gave each of them Jest and Cypress tests.</span>
+          <span data-l="nl" lang="nl">Selfservicetools in de KPN-app en op de website die verbinding maken met het modem van de klant, zodat mensen problemen zelf kunnen oplossen zonder de klantenservice te bellen. Ik maakte van ontwerpen voor lange flows met meerdere stappen StencilJS-webcomponenten. Die lezen via een API apparaatgegevens uit en kiezen op basis daarvan de volgende stap, inclusief polling om te zien wanneer een modem weer online is. Ook zette ik oudere tools over van Angular en React naar StencilJS en gaf ik ze allemaal Jest- en Cypress-tests.</span>
         </li>
         <li>
           <svg class="icon" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="3" y="0" width="8" height="1" fill="#f8981c"/><rect x="1" y="1" width="10" height="1" fill="#f8981c"/><rect x="1" y="2" width="3" height="1" fill="#f8981c"/><rect x="4" y="2" width="4" height="1" fill="#ffffff"/><rect x="8" y="2" width="3" height="1" fill="#f8981c"/><rect x="1" y="3" width="2" height="1" fill="#f8981c"/><rect x="3" y="3" width="2" height="1" fill="#ffffff"/><rect x="5" y="3" width="2" height="1" fill="#f8981c"/><rect x="7" y="3" width="2" height="1" fill="#ffffff"/><rect x="9" y="3" width="2" height="1" fill="#f8981c"/><rect x="1" y="4" width="1" height="1" fill="#f8981c"/><rect x="2" y="4" width="2" height="1" fill="#ffffff"/><rect x="4" y="4" width="4" height="1" fill="#f8981c"/><rect x="8" y="4" width="2" height="1" fill="#ffffff"/><rect x="10" y="4" width="1" height="1" fill="#f8981c"/><rect x="1" y="5" width="1" height="1" fill="#f8981c"/><rect x="2" y="5" width="2" height="1" fill="#ffffff"/><rect x="4" y="5" width="4" height="1" fill="#f8981c"/><rect x="8" y="5" width="2" height="1" fill="#ffffff"/><rect x="10" y="5" width="1" height="1" fill="#f8981c"/><rect x="1" y="6" width="1" height="1" fill="#f8981c"/><rect x="2" y="6" width="2" height="1" fill="#ffffff"/><rect x="4" y="6" width="4" height="1" fill="#f8981c"/><rect x="8" y="6" width="2" height="1" fill="#ffffff"/><rect x="10" y="6" width="1" height="1" fill="#f8981c"/><rect x="1" y="7" width="1" height="1" fill="#f8981c"/><rect x="2" y="7" width="2" height="1" fill="#ffffff"/><rect x="4" y="7" width="4" height="1" fill="#f8981c"/><rect x="8" y="7" width="2" height="1" fill="#ffffff"/><rect x="10" y="7" width="1" height="1" fill="#f8981c"/><rect x="1" y="8" width="2" height="1" fill="#f8981c"/><rect x="3" y="8" width="2" height="1" fill="#ffffff"/><rect x="5" y="8" width="2" height="1" fill="#f8981c"/><rect x="7" y="8" width="2" height="1" fill="#ffffff"/><rect x="9" y="8" width="2" height="1" fill="#f8981c"/><rect x="1" y="9" width="3" height="1" fill="#f8981c"/><rect x="4" y="9" width="4" height="1" fill="#ffffff"/><rect x="8" y="9" width="3" height="1" fill="#f8981c"/><rect x="1" y="10" width="10" height="1" fill="#f8981c"/><rect x="1" y="11" width="8" height="1" fill="#f8981c"/></svg>
           <b>Ordina</b> <small>2020 – 2022</small>
-          <span>Projects for UMC Groningen and KWF, the Dutch Cancer Society: a treatment advice tool for kidney patients, and the component library behind KWF's new website.</span>
+          <span data-l="en">Two projects. For UMC Groningen I worked on a tool that gives treatment advice for kidney patients. The React front end sends patient data to R models written by a data strategist, through a Node service that runs them and stores the results so doctors can look them up later. For KWF, the Dutch Cancer Society, I built Twig components for their new Drupal site together with a full stack developer, and set up Storybook so the team could see every component in one place.</span>
+          <span data-l="nl" lang="nl">Twee projecten. Voor het UMC Groningen werkte ik aan een tool die behandeladvies geeft voor nierpatiënten. De React-frontend stuurt patiëntgegevens naar R-modellen van een datastrateeg, via een Node-service die de modellen draait en de uitkomsten opslaat, zodat artsen ze later kunnen terugzien. Voor KWF bouwde ik samen met een fullstack developer Twig-componenten voor de nieuwe Drupal-site, en zette ik Storybook op zodat het team alle componenten op één plek kon zien.</span>
         </li>
         <li>
           <svg class="icon" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="0" width="10" height="1" fill="#ffe12e"/><rect x="1" y="1" width="1" height="1" fill="#ffe12e"/><rect x="2" y="1" width="4" height="1" fill="#111111"/><rect x="6" y="1" width="6" height="1" fill="#ffe12e"/><rect x="0" y="2" width="1" height="1" fill="#ffe12e"/><rect x="1" y="2" width="2" height="1" fill="#111111"/><rect x="3" y="2" width="2" height="1" fill="#ffe12e"/><rect x="5" y="2" width="2" height="1" fill="#111111"/><rect x="7" y="2" width="5" height="1" fill="#ffe12e"/><rect x="0" y="3" width="1" height="1" fill="#ffe12e"/><rect x="1" y="3" width="2" height="1" fill="#111111"/><rect x="3" y="3" width="9" height="1" fill="#ffe12e"/><rect x="0" y="4" width="1" height="1" fill="#ffe12e"/><rect x="1" y="4" width="2" height="1" fill="#111111"/><rect x="3" y="4" width="1" height="1" fill="#ffe12e"/><rect x="4" y="4" width="3" height="1" fill="#111111"/><rect x="7" y="4" width="5" height="1" fill="#ffe12e"/><rect x="0" y="5" width="1" height="1" fill="#ffe12e"/><rect x="1" y="5" width="2" height="1" fill="#111111"/><rect x="3" y="5" width="2" height="1" fill="#ffe12e"/><rect x="5" y="5" width="2" height="1" fill="#111111"/><rect x="7" y="5" width="1" height="1" fill="#ffe12e"/><rect x="8" y="5" width="3" height="1" fill="#111111"/><rect x="11" y="5" width="1" height="1" fill="#ffe12e"/><rect x="0" y="6" width="1" height="1" fill="#ffe12e"/><rect x="1" y="6" width="2" height="1" fill="#111111"/><rect x="3" y="6" width="2" height="1" fill="#ffe12e"/><rect x="5" y="6" width="3" height="1" fill="#111111"/><rect x="8" y="6" width="2" height="1" fill="#ffe12e"/><rect x="10" y="6" width="2" height="1" fill="#111111"/><rect x="0" y="7" width="1" height="1" fill="#ffe12e"/><rect x="1" y="7" width="2" height="1" fill="#111111"/><rect x="3" y="7" width="2" height="1" fill="#ffe12e"/><rect x="5" y="7" width="3" height="1" fill="#111111"/><rect x="8" y="7" width="2" height="1" fill="#ffe12e"/><rect x="10" y="7" width="2" height="1" fill="#111111"/><rect x="0" y="8" width="2" height="1" fill="#ffe12e"/><rect x="2" y="8" width="4" height="1" fill="#111111"/><rect x="6" y="8" width="2" height="1" fill="#ffe12e"/><rect x="8" y="8" width="3" height="1" fill="#111111"/><rect x="11" y="8" width="1" height="1" fill="#ffe12e"/><rect x="0" y="9" width="12" height="1" fill="#ffe12e"/><rect x="0" y="10" width="11" height="1" fill="#ffe12e"/></svg>
-          <b>GoDo</b> <small>2019</small>
-          <span>A recruitment agency's new website, start to finish: user research, design, prototypes and testing, then building it myself.</span>
+          <b>GoDo</b> <small><span data-l="en">2019, internship</span><span data-l="nl" lang="nl">2019, stage</span></small>
+          <span data-l="en">A recruitment agency wanted a new website to fill more vacancies. I did the research (interviews, competitor analysis, expert reviews, context mapping) and the design (card sorting, Crazy 8s, personas, journey maps, wireframes), and tested a mobile-first prototype with users. Then I built it as a WordPress template the recruiters can manage themselves, with endpoints that pull open vacancies from the Bullhorn API, OAuth login included.</span>
+          <span data-l="nl" lang="nl">Een recruitmentbureau wilde een nieuwe website om meer vacatures in te vullen. Ik deed het onderzoek (interviews, concurrentieanalyse, expert reviews, context mapping) en het ontwerp (card sorting, Crazy 8s, persona&#39;s, journey maps, wireframes), en testte een mobile-first prototype met gebruikers. Daarna bouwde ik het als WordPress-template die de recruiters zelf kunnen beheren, met endpoints die openstaande vacatures uit de Bullhorn API halen, inclusief de OAuth-login.</span>
         </li>
         <li>
           <svg class="icon" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="4" y="0" width="4" height="1" fill="#dae64a"/><rect x="2" y="1" width="6" height="1" fill="#dae64a"/><rect x="8" y="1" width="2" height="1" fill="#111111"/><rect x="1" y="2" width="4" height="1" fill="#dae64a"/><rect x="5" y="2" width="6" height="1" fill="#111111"/><rect x="1" y="3" width="2" height="1" fill="#dae64a"/><rect x="3" y="3" width="8" height="1" fill="#111111"/><rect x="0" y="4" width="2" height="1" fill="#dae64a"/><rect x="2" y="4" width="1" height="1" fill="#111111"/><rect x="3" y="4" width="6" height="1" fill="#ffffff"/><rect x="9" y="4" width="2" height="1" fill="#111111"/><rect x="11" y="4" width="1" height="1" fill="#dae64a"/><rect x="0" y="5" width="2" height="1" fill="#dae64a"/><rect x="2" y="5" width="1" height="1" fill="#111111"/><rect x="3" y="5" width="6" height="1" fill="#ffffff"/><rect x="9" y="5" width="2" height="1" fill="#111111"/><rect x="11" y="5" width="1" height="1" fill="#dae64a"/><rect x="0" y="6" width="2" height="1" fill="#dae64a"/><rect x="2" y="6" width="3" height="1" fill="#111111"/><rect x="5" y="6" width="2" height="1" fill="#ffffff"/><rect x="7" y="6" width="4" height="1" fill="#111111"/><rect x="11" y="6" width="1" height="1" fill="#dae64a"/><rect x="0" y="7" width="2" height="1" fill="#dae64a"/><rect x="2" y="7" width="3" height="1" fill="#111111"/><rect x="5" y="7" width="2" height="1" fill="#ffffff"/><rect x="7" y="7" width="3" height="1" fill="#111111"/><rect x="10" y="7" width="2" height="1" fill="#dae64a"/><rect x="1" y="8" width="1" height="1" fill="#dae64a"/><rect x="2" y="8" width="3" height="1" fill="#111111"/><rect x="5" y="8" width="2" height="1" fill="#ffffff"/><rect x="7" y="8" width="3" height="1" fill="#111111"/><rect x="10" y="8" width="1" height="1" fill="#dae64a"/><rect x="1" y="9" width="2" height="1" fill="#dae64a"/><rect x="3" y="9" width="6" height="1" fill="#111111"/><rect x="9" y="9" width="2" height="1" fill="#dae64a"/><rect x="2" y="10" width="8" height="1" fill="#dae64a"/><rect x="4" y="11" width="4" height="1" fill="#dae64a"/></svg>
-          <b>Tweakers</b> <small>2019</small>
-          <span>UX on one of the biggest tech sites in the Netherlands: A/B tests to settle design debates, and a design library for the team.</span>
+          <b>Tweakers</b> <small><span data-l="en">2019, internship</span><span data-l="nl" lang="nl">2019, stage</span></small>
+          <span data-l="en">In a UX team of four designers at one of the biggest tech sites in the Netherlands. I wrote A/B tests in JavaScript and CSS and ran them on the live site, which settled a good number of design discussions. I also set up the team&#39;s Sketch library so we could make prototypes faster.</span>
+          <span data-l="nl" lang="nl">In een UX-team van vier designers bij een van de grootste techsites van Nederland. Ik schreef A/B-tests in JavaScript en CSS en draaide ze op de live site, wat heel wat ontwerpdiscussies beslechtte. Ook zette ik de Sketch-library van het team op, zodat we sneller prototypes konden maken.</span>
         </li>
       </ul>
 
-      <h2>On the side</h2>
+      <h2 data-l="en">On the side</h2>
+      <h2 data-l="nl" lang="nl">Ernaast</h2>
 
       <ul class="work">
         <li>
           <svg class="icon" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="1" height="1" fill="#e23d1c"/><rect x="6" y="0" width="1" height="1" fill="#e23d1c"/><rect x="1" y="1" width="2" height="1" fill="#e23d1c"/><rect x="5" y="1" width="2" height="1" fill="#e23d1c"/><rect x="1" y="2" width="1" height="1" fill="#e23d1c"/><rect x="2" y="2" width="6" height="1" fill="#f46b15"/><rect x="1" y="3" width="2" height="1" fill="#f46b15"/><rect x="3" y="3" width="1" height="1" fill="#ffffff"/><rect x="4" y="3" width="2" height="1" fill="#f46b15"/><rect x="6" y="3" width="1" height="1" fill="#ffffff"/><rect x="7" y="3" width="2" height="1" fill="#f46b15"/><rect x="1" y="4" width="3" height="1" fill="#f46b15"/><rect x="6" y="4" width="3" height="1" fill="#f46b15"/><rect x="2" y="5" width="6" height="1" fill="#f46b15"/><rect x="4" y="6" width="6" height="1" fill="#f46b15"/><rect x="8" y="7" width="3" height="1" fill="#f46b15"/><rect x="9" y="8" width="2" height="1" fill="#f46b15"/><rect x="1" y="9" width="1" height="1" fill="#fbb03b"/><rect x="8" y="9" width="3" height="1" fill="#f46b15"/><rect x="1" y="10" width="2" height="1" fill="#fbb03b"/><rect x="3" y="10" width="7" height="1" fill="#f46b15"/><rect x="2" y="11" width="2" height="1" fill="#fbb03b"/><rect x="4" y="11" width="4" height="1" fill="#f46b15"/></svg>
-          <b>SLNT.stream</b> <small>with friends</small>
-          <span>Watch YouTube in sync with your favourite Twitch streamer: front end, back end, a Chrome extension and chat commands.</span>
+          <b>SLNT.stream</b> <small><span data-l="en">with friends</span><span data-l="nl" lang="nl">met vrienden</span></small>
+          <span data-l="en">Watch YouTube in sync with your favourite Twitch streamer. We built the front end, back end, a Chrome extension and the chat commands.</span>
+          <span data-l="nl" lang="nl">Kijk YouTube synchroon met je favoriete Twitch-streamer. We bouwden de front end, de back end, een Chrome-extensie en de chatcommando&#39;s.</span>
         </li>
         <li>
           <svg class="icon" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="4" height="1" fill="#d7262b"/><rect x="7" y="0" width="4" height="1" fill="#d7262b"/><rect x="0" y="1" width="12" height="1" fill="#d7262b"/><rect x="0" y="2" width="12" height="1" fill="#d7262b"/><rect x="0" y="3" width="5" height="1" fill="#d7262b"/><rect x="5" y="3" width="1" height="1" fill="#ffffff"/><rect x="6" y="3" width="6" height="1" fill="#d7262b"/><rect x="0" y="4" width="4" height="1" fill="#d7262b"/><rect x="4" y="4" width="1" height="1" fill="#ffffff"/><rect x="5" y="4" width="1" height="1" fill="#d7262b"/><rect x="6" y="4" width="1" height="1" fill="#ffffff"/><rect x="7" y="4" width="5" height="1" fill="#d7262b"/><rect x="0" y="5" width="4" height="1" fill="#ffffff"/><rect x="4" y="5" width="3" height="1" fill="#d7262b"/><rect x="7" y="5" width="1" height="1" fill="#ffffff"/><rect x="8" y="5" width="1" height="1" fill="#d7262b"/><rect x="9" y="5" width="3" height="1" fill="#ffffff"/><rect x="1" y="6" width="7" height="1" fill="#d7262b"/><rect x="8" y="6" width="1" height="1" fill="#ffffff"/><rect x="9" y="6" width="2" height="1" fill="#d7262b"/><rect x="1" y="7" width="10" height="1" fill="#d7262b"/><rect x="2" y="8" width="8" height="1" fill="#d7262b"/><rect x="3" y="9" width="6" height="1" fill="#d7262b"/><rect x="4" y="10" width="4" height="1" fill="#d7262b"/><rect x="5" y="11" width="2" height="1" fill="#d7262b"/></svg>
-          <b><a href="https://q4care-opleidingen.nl/" target="_blank" rel="noopener">Q4Care</a></b> <small>freelance</small>
-          <span>A portal for course participants to download their certificates and find course material: front end, back end, and the PDFs too.</span>
+          <b><a href="https://q4care-opleidingen.nl/" target="_blank" rel="noopener">Q4Care</a></b> <small><span data-l="en">freelance</span><span data-l="nl" lang="nl">freelance</span></small>
+          <span data-l="en">A portal where course participants download their certificates and find course material. I built the front end, the back end and the PDFs.</span>
+          <span data-l="nl" lang="nl">Een portaal waar cursisten hun certificaten downloaden en lesmateriaal vinden. Ik bouwde de front end, de back end en de pdf&#39;s.</span>
         </li>
       </ul>
 
-      <h2>How I work</h2>
+      <h2 data-l="en">How I work</h2>
+      <h2 data-l="nl" lang="nl">Zo werk ik</h2>
 
-      <p class="loop">
+      <p class="loop" data-l="en">
         <b class="tomato">listen</b>
         <span>→ <b class="mustard">sketch</b></span>
         <span>→ <b class="leaf">build</b></span>
@@ -137,20 +167,34 @@
         <span>→ <b class="grape">watch</b></span>
         <span>→ <b>repeat</b></span>
       </p>
+      <p class="loop" data-l="nl" lang="nl">
+        <b class="tomato">luisteren</b>
+        <span>→ <b class="mustard">schetsen</b></span>
+        <span>→ <b class="leaf">bouwen</b></span>
+        <span>→ <b class="sky">live zetten</b></span>
+        <span>→ <b class="grape">bijhouden</b></span>
+        <span>→ <b>herhalen</b></span>
+      </p>
 
-      <p>AI is part of every step. It helps me make sense of research and data, turns sketches into working code, and does the refactoring nobody wants to do. I review and decide. It never needs coffee. I still do.</p>
+      <p data-l="en">I use AI at every step: to make sense of research and data, to turn sketches into working code, and for the refactoring nobody wants to do. I review what it makes and decide what stays.</p>
+      <p data-l="nl" lang="nl">Ik gebruik AI bij elke stap: om onderzoek en data te begrijpen, om van schetsen werkende code te maken en voor het refactorwerk waar niemand zin in heeft. Ik controleer wat eruit komt en beslis wat blijft.</p>
 
-      <p>My home turf is JavaScript and TypeScript: React, Next.js, Astro, Node. But with AI at the keyboard, taste matters more than any one stack, so I'm happy to go wherever the problem is.</p>
+      <p data-l="en">Most of my work is in JavaScript and TypeScript: React, Next.js, Astro and Node. At Kieskeurig I also write C# for the product data pipeline. I&#39;m not attached to one stack, though. With AI doing a lot of the typing, I&#39;m happy to work wherever the problem is.</p>
+      <p data-l="nl" lang="nl">Het meeste werk doe ik in JavaScript en TypeScript: React, Next.js, Astro en Node. Bij Kieskeurig schrijf ik ook C# voor de productdatapijplijn. Aan één stack hang ik niet. Nu AI veel van het typwerk doet, werk ik graag waar het probleem zit.</p>
 
-      <p>I work best close to the people I'm building for. I figure things out on my own, say so when something's off, and usually bring a joke to standup. I care about the details nobody puts in a ticket: the empty state, the error message, the second visit.</p>
+      <p data-l="en">I work best close to the people I&#39;m building for. I figure things out on my own, say so when something&#39;s off, and usually have a joke ready for standup. I pay attention to the things that rarely make it into a ticket, like empty states and error messages.</p>
+      <p data-l="nl" lang="nl">Ik werk het liefst dicht bij de mensen voor wie ik bouw. Ik zoek dingen zelf uit, zeg het als iets niet klopt en heb meestal een grap klaar voor de standup. Ik let op de dingen die zelden in een ticket komen, zoals lege schermen en foutmeldingen.</p>
 
-      <h2>Say hi</h2>
+      <h2 data-l="en">Say hi</h2>
+      <h2 data-l="nl" lang="nl">Zeg hallo</h2>
 
-      <p>If you're working on something and need someone to take it from idea to production, I'd like to hear about it. Mail me at <a href="mailto:menno@vanvoor.st">menno@vanvoor.st</a>, or find me on <a href="https://www.linkedin.com/in/vanvoorst/" target="_blank" rel="noopener">LinkedIn</a> and <a href="https://github.com/mennovanvoorst" target="_blank" rel="noopener">GitHub</a>.</p>
+      <p data-l="en">Working on something and need someone to take it from idea to production? Email me at <a href="mailto:menno@vanvoor.st">menno@vanvoor.st</a>, or find me on <a href="https://www.linkedin.com/in/vanvoorst/" target="_blank" rel="noopener">LinkedIn</a> and <a href="https://github.com/mennovanvoorst" target="_blank" rel="noopener">GitHub</a>.</p>
+      <p data-l="nl" lang="nl">Werk je aan iets en zoek je iemand die het van idee tot productie brengt? Mail me op <a href="mailto:menno@vanvoor.st">menno@vanvoor.st</a>, of vind me op <a href="https://www.linkedin.com/in/vanvoorst/" target="_blank" rel="noopener">LinkedIn</a> en <a href="https://github.com/mennovanvoorst" target="_blank" rel="noopener">GitHub</a>.</p>
     </main>
 
     <footer class="footer">
-      <p>No cookies on this site. Some dinosaurs, though.</p>
+      <p data-l="en">No cookies on this site. Some dinosaurs, though. Say rawr. Just don't click the yellow star.</p>
+      <p data-l="nl" lang="nl">Geen cookies op deze site. Wel wat dinosaurussen. Zeg rawr. Maar klik niet op de gele ster.</p>
     </footer>
 
     <script src="script.js" defer></script>
