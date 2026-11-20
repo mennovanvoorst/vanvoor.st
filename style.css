@@ -176,7 +176,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 .lost h1 { margin-bottom: 0.75rem; font: 700 1.6rem/1.15 var(--pixel); }
 
 /* Cursor trail */
-.trail { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+.trail { position: fixed; inset: 0; z-index: 10; width: 100%; height: 100%; pointer-events: none; }
 
 /* Scene: at the end of the page, a ground line and two old trees under a starry sky, with Chrome's
    T-Rex wandering between them. Everything is drawn in "pixels" of --px. */
@@ -273,7 +273,20 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 .speck svg { display: block; width: 100%; }
 @keyframes glimmer { 45% { opacity: 0.15; } 55% { opacity: 0.6; } }
 
-/* The yellow star. Don't click it. */
+.moon { position: absolute; top: 8%; left: 16%; width: calc(10 * var(--px)); color: var(--trex); }
+.moon svg { display: block; width: 100%; }
+
+/* By day: clouds drifting right to left, a pixel at a time. */
+.clouds { position: absolute; inset: 0; pointer-events: none; }
+.cloud { position: absolute; left: 0; width: calc(16 * var(--px)); color: var(--trex); opacity: 0.5; animation: drift 100s steps(400) infinite; }
+.cloud svg { display: block; width: 100%; }
+@keyframes drift { from { transform: translateX(100vw); } to { transform: translateX(calc(-16 * var(--px))); } }
+.scene.day .night, .scene:not(.day) .clouds { display: none; }
+
+/* Nothing needs to move while the scene is off screen. */
+.scene.asleep * { animation-play-state: paused !important; }
+
+/* The yellow star (the sun, by day). Don't click it. */
 .star {
   position: absolute;
   top: 0.5rem;
@@ -288,11 +301,12 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
   animation: twinkle 2.4s steps(1) infinite;
 }
 .star svg { display: block; width: 100%; }
+.scene.day .star .star-shape, .scene:not(.day) .star .sun-shape { display: none; }
 .star:hover { animation: none; transform: scale(1.2); }
 @keyframes twinkle { 60% { opacity: 0.35; } 70% { opacity: 1; } 80% { opacity: 0.35; } }
 
 /* The asteroid, the effects canvas, the crater, and the shake when it lands. */
-.fx { position: fixed; inset: 0; z-index: 25; pointer-events: none; }
+.fx { position: fixed; inset: 0; z-index: 25; width: 100%; height: 100%; pointer-events: none; }
 .asteroid {
   position: fixed;
   top: 0;
@@ -339,7 +353,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dino.walking .frame-a, .dino.walking .frame-b, .dino.talking svg, .star, .speck, .tree.shaken { animation: none; }
+  .dino.walking .frame-a, .dino.walking .frame-b, .dino.talking svg, .star, .speck, .cloud, .tree.shaken { animation: none; }
   .work .icon { transition: none; }
   .js .work .icon { transform: none; }
 }

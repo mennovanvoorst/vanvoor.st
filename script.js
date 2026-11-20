@@ -310,6 +310,39 @@ const starRows = [
   ".##...##.",
   ".#.....#.",
 ];
+// By day the yellow thing in the sky is the sun instead.
+const sunRows = [
+  "....#....",
+  ".#.....#.",
+  "...###...",
+  "..#####..",
+  "#.#####.#",
+  "..#####..",
+  "...###...",
+  ".#.....#.",
+  "....#....",
+];
+const moonRows = [
+  "...####...",
+  ".#####....",
+  ".####.....",
+  "####......",
+  "####......",
+  "####......",
+  "####......",
+  ".####.....",
+  ".#####....",
+  "...####...",
+];
+// Clouds by day, outlined like the ones on Chrome's offline page.
+const cloudRows = [
+  "......####......",
+  "....##....##....",
+  "..##........#...",
+  ".#...........##.",
+  "#..............#",
+  "################",
+];
 // The other stars: mostly single pixels, a few little sparkles. Just for looking at.
 const speckRows = [["#"], ["#"], ["#"], [".#.", "###", ".#."], ["..#..", "..#..", "##.##", "..#..", "..#.."]];
 const craterRows = [
@@ -336,7 +369,7 @@ const sprite = (rows, inner = pixels(rows)) =>
 const scene = document.createElement("div");
 scene.className = "scene";
 scene.innerHTML = `
-  <button class="star" type="button">${sprite(starRows)}</button>
+  <button class="star" type="button">${sprite(starRows).replace("<svg ", '<svg class="star-shape" ')}${sprite(sunRows).replace("<svg ", '<svg class="sun-shape" ')}</button>
   <div class="ground" aria-hidden="true"></div>
   ${sprite(oakRows).replace("<svg ", '<svg class="tree oak" ')}
   ${sprite(elmRows).replace("<svg ", '<svg class="tree elm" ')}
@@ -353,13 +386,16 @@ const ground = scene.querySelector(".ground");
 const star = scene.querySelector(".star");
 const px = () => parseFloat(getComputedStyle(scene).getPropertyValue("--px")) || 3;
 
-// Scatter the sky above the trees.
+// The sky follows the theme: stars and a moon at night, drifting clouds by day.
 const sky = document.createElement("div");
 sky.className = "night";
 sky.setAttribute("aria-hidden", "true");
-scene.prepend(sky);
+const clouds = document.createElement("div");
+clouds.className = "clouds";
+clouds.setAttribute("aria-hidden", "true");
+scene.prepend(sky, clouds);
 function scatter() {
-  sky.innerHTML = "";
+  sky.innerHTML = `<span class="moon">${sprite(moonRows)}</span>`;
   for (let i = 0; i < 20; i++) {
     const rows = speckRows[i % speckRows.length];
     const speck = document.createElement("span");
@@ -376,14 +412,35 @@ function scatter() {
   }
 }
 scatter();
+for (let i = 0; i < 3; i++) {
+  const cloud = document.createElement("span");
+  cloud.className = "cloud";
+  cloud.innerHTML = sprite(cloudRows);
+  cloud.style.top = `${6 + i * 11 + Math.random() * 6}%`;
+  cloud.style.animationDuration = `${70 + Math.random() * 50}s`;
+  cloud.style.animationDelay = `${-(i / 3 + Math.random() * 0.2) * 100}s`;
+  if (reducedMotion) cloud.style.left = `${12 + i * 30}%`;
+  clouds.append(cloud);
+}
 const trexColor = () => getComputedStyle(scene).color;
 
-function labelStar() {
+const darkQuery = matchMedia("(prefers-color-scheme: dark)");
+const isNight = () => {
+  const picked = document.documentElement.dataset.theme;
+  return picked ? picked === "dark" : darkQuery.matches;
+};
+function setSky() {
+  const day = !isNight();
+  scene.classList.toggle("day", day);
   star.title = t("don't.", "niet doen.");
-  star.setAttribute("aria-label", t("A star. Don't click it.", "Een ster. Niet op klikken."));
+  star.setAttribute(
+    "aria-label",
+    day ? t("The sun. Don't click it.", "De zon. Niet op klikken.") : t("A star. Don't click it.", "Een ster. Niet op klikken."),
+  );
 }
-labelStar();
-new MutationObserver(labelStar).observe(document.documentElement, { attributeFilter: ["lang"] });
+setSky();
+darkQuery.addEventListener("change", setSky);
+new MutationObserver(setSky).observe(document.documentElement, { attributeFilter: ["lang", "data-theme"] });
 
 let quiet;
 function say(text, ms = 2500) {
@@ -453,11 +510,24 @@ function wander(now) {
     }
   }
   place();
-  requestAnimationFrame(wander);
+  if (onScreen) requestAnimationFrame(wander);
+  else looping = false;
 }
 place();
 addEventListener("resize", place);
-requestAnimationFrame(wander);
+
+// Only animate while the scene is on screen; no point walking around when nobody's looking.
+let onScreen = false;
+let looping = false;
+new IntersectionObserver(([entry]) => {
+  onScreen = entry.isIntersecting;
+  scene.classList.toggle("asleep", !onScreen);
+  if (onScreen && !looping) {
+    looping = true;
+    lastTime = performance.now();
+    requestAnimationFrame(wander);
+  }
+}).observe(scene);
 
 // Click the ground and the dino comes over.
 ground.addEventListener("click", (e) => {
