@@ -27,6 +27,7 @@ script.js      the cursor trail and a few surprises
 fonts/         Bricolage Grotesque and Silkscreen, self-hosted (no Google calls)
 me.jpg         hi 👋
 favicon.svg    🦕
+tree-*.svg     two old trees for the dino to wander between
 robots.txt     the welcome mat for crawlers
 sitemap.xml    a very short map
 ```
@@ -49,11 +50,10 @@ Yes, it's basically a sandwich.
 <summary>Spoilers, obviously.</summary>
 
 - Type `rawr` or `dino` anywhere on the page.
-- Poke my name three times, fast.
-- While the dino is out, your cursor leaves footprints.
+- Poke my name three times, fast. Or poke the dino.
 - Switch to another tab and back again.
 - Open the console.
-- Visit a page that doesn't exist, then poke what you find there.
+- Visit a page that doesn't exist.
 
 </details>
 

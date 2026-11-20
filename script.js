@@ -1,9 +1,7 @@
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const colors = ["#f2542d", "#f5b700", "#2fa36b", "#3a86ff", "#a07aff"];
 
-let dinoMode = false;
-
-/* Cursor trail: colourful dots, or footprints while the dino is out. */
+/* Cursor trail: colourful pixels. */
 if (!reducedMotion && matchMedia("(pointer: fine)").matches) {
   const canvas = document.createElement("canvas");
   canvas.className = "trail";
@@ -29,29 +27,16 @@ if (!reducedMotion && matchMedia("(pointer: fine)").matches) {
     const { clientX: x, clientY: y } = e;
     const dist = last ? Math.hypot(x - last.x, y - last.y) : Infinity;
 
-    if (dinoMode) {
-      if (dist < 28) return;
-      const angle = last ? Math.atan2(y - last.y, x - last.x) : 0;
-      const side = step++ % 2 ? 1 : -1;
-      particles.push({
-        foot: true,
-        x: x + Math.cos(angle + Math.PI / 2) * 7 * side,
-        y: y + Math.sin(angle + Math.PI / 2) * 7 * side,
-        angle,
-        life: 1,
-      });
-    } else {
-      if (dist < 8) return;
-      particles.push({
-        x,
-        y,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6 + 0.4,
-        size: Math.random() < 0.5 ? 4 : 8,
-        color: colors[step++ % colors.length],
-        life: 1,
-      });
-    }
+    if (dist < 8) return;
+    particles.push({
+      x,
+      y,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: (Math.random() - 0.5) * 0.6 + 0.4,
+      size: Math.random() < 0.5 ? 4 : 8,
+      color: colors[step++ % colors.length],
+      life: 1,
+    });
     last = { x, y };
     if (!running) {
       running = true;
@@ -62,50 +47,28 @@ if (!reducedMotion && matchMedia("(pointer: fine)").matches) {
   // Everything snaps to a 4px grid, so the trail looks like it came out of an old console.
   const snap = (v) => Math.round(v / 4) * 4;
 
-  function drawFoot(p) {
-    ctx.globalAlpha = Math.ceil(p.life * 4) / 5;
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--trex") || "#535353";
-    const x = snap(p.x);
-    const y = snap(p.y);
-    ctx.fillRect(x - 4, y - 4, 8, 8);
-    // three toes, pointing where the dino was heading
-    const dx = Math.round(Math.cos(p.angle));
-    const dy = Math.round(Math.sin(p.angle));
-    for (const s of [-1, 0, 1]) {
-      const tx = x + dx * 8 + (dy ? s * 6 : 0);
-      const ty = y + dy * 8 + (dx ? s * 6 : 0);
-      ctx.fillRect(tx - 2, ty - 2, 4, 4);
-    }
-  }
-
   function tick() {
     ctx.clearRect(0, 0, innerWidth, innerHeight);
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
-      p.life -= p.foot ? 0.008 : 0.025;
+      p.life -= 0.025;
       if (p.life <= 0) {
         particles.splice(i, 1);
         continue;
       }
-      if (p.foot) {
-        drawFoot(p);
-      } else {
-        p.x += p.vx;
-        p.y += p.vy;
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = p.color;
-        const s = p.life > 0.5 ? p.size : 4;
-        ctx.fillRect(snap(p.x) - s / 2, snap(p.y) - s / 2, s, s);
-      }
+      p.x += p.vx;
+      p.y += p.vy;
+      ctx.fillStyle = p.color;
+      const s = p.life > 0.5 ? p.size : 4;
+      ctx.fillRect(snap(p.x) - s / 2, snap(p.y) - s / 2, s, s);
     }
-    ctx.globalAlpha = 1;
     if (particles.length) requestAnimationFrame(tick);
     else running = false;
   }
 }
 
-/* Dino. Type "rawr" or "dino", or poke my name three times.
-   It's the T-Rex from Chrome's offline page (Chromium, BSD licence), two running frames. */
+/* At the bottom of the screen, Chrome's T-Rex (Chromium, BSD licence) wanders between two old trees.
+   Type "rawr" or "dino", poke my name three times, or poke the dino, and it says hi. */
 const trexRun1 = [
   "...........########.",
   "..........##########",
@@ -168,30 +131,81 @@ function pixels(rows) {
   return out;
 }
 
-const dinoSvg = `
-<svg viewBox="0 0 20 22" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true">
-  <g class="frame-a">${pixels(trexRun1)}</g>
-  <g class="frame-b">${pixels(trexRun2)}</g>
-</svg>`;
+const asset = (file) => new URL(file, document.currentScript.src).href;
+const scene = document.createElement("div");
+scene.className = "scene";
+scene.innerHTML = `
+  <div class="ground" aria-hidden="true"></div>
+  <img class="tree oak" src="${asset("tree-oak.svg")}" alt="" />
+  <img class="tree elm" src="${asset("tree-elm.svg")}" alt="" />
+  <div class="dino">
+    <span class="say" role="status"></span>
+    <svg viewBox="0 0 20 22" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true">
+      <g class="frame-a">${pixels(trexRun1)}</g>
+      <g class="frame-b">${pixels(trexRun2)}</g>
+    </svg>
+  </div>`;
+document.body.append(scene);
+document.documentElement.classList.add("has-scene");
 
-function releaseDino() {
-  if (document.querySelector(".dino")) return;
-  const dino = document.createElement("div");
-  dino.className = "dino";
-  dino.innerHTML = `<span class="say">rawr!</span>${dinoSvg}`;
-  document.body.append(dino);
-  dinoMode = true;
-  setTimeout(() => {
-    dino.remove();
-    dinoMode = false;
-  }, reducedMotion ? 3000 : 9000);
+const dino = scene.querySelector(".dino");
+const say = scene.querySelector(".say");
+
+let quiet;
+function rawr() {
+  say.textContent = "rawr!";
+  dino.classList.add("talking");
+  clearTimeout(quiet);
+  quiet = setTimeout(() => {
+    dino.classList.remove("talking");
+    say.textContent = "";
+  }, 2500);
 }
+dino.addEventListener("click", rawr);
+
+// Wander: walk to a random spot, stand around for a bit, repeat. Positions snap to the pixel size.
+const px = () => parseFloat(getComputedStyle(scene).getPropertyValue("--px")) || 3;
+const maxX = () => Math.max(0, innerWidth - dino.offsetWidth);
+let x = maxX() * (0.25 + Math.random() * 0.5);
+let target = x;
+let restUntil = performance.now() + 1500;
+let lastTime = performance.now();
+
+function place() {
+  const p = px();
+  x = Math.min(x, maxX());
+  dino.style.transform = `translateX(${Math.round(x / p) * p}px)`;
+}
+
+function wander(now) {
+  const dt = Math.min(now - lastTime, 100) / 1000;
+  lastTime = now;
+  if (now >= restUntil) {
+    if (Math.abs(target - x) < 1) {
+      target = Math.random() * maxX();
+      dino.classList.toggle("left", target < x);
+    }
+    dino.classList.add("walking");
+    const step = Math.sign(target - x) * 40 * dt;
+    x = Math.abs(target - x) <= Math.abs(step) ? target : x + step;
+    if (x === target) {
+      dino.classList.remove("walking");
+      restUntil = now + 1000 + Math.random() * 4000;
+    }
+  }
+  place();
+  requestAnimationFrame(wander);
+}
+
+place();
+addEventListener("resize", place);
+if (!reducedMotion) requestAnimationFrame(wander);
 
 let typed = "";
 addEventListener("keydown", (e) => {
   if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
   typed = (typed + e.key.toLowerCase()).slice(-4);
-  if (typed === "rawr" || typed === "dino") releaseDino();
+  if (typed === "rawr" || typed === "dino") rawr();
 });
 
 const nameEl = document.querySelector(".intro h1");
@@ -201,21 +215,9 @@ nameEl?.addEventListener("click", () => {
   pokes = pokes.filter((t) => now - t < 1200).concat(now);
   if (pokes.length >= 3) {
     pokes = [];
-    releaseDino();
+    rawr();
   }
 });
-
-/* 404: the extinct page gets a dino of its own. Poke it and it walks off. */
-const fossil = document.querySelector(".fossil");
-if (fossil) {
-  fossil.innerHTML = dinoSvg;
-  fossil.addEventListener("click", () => {
-    if (document.querySelector(".dino")) return;
-    releaseDino();
-    fossil.style.visibility = "hidden";
-    setTimeout(() => (fossil.style.visibility = ""), reducedMotion ? 3000 : 9000);
-  });
-}
 
 /* Work squares pop in, one after the other, once the list is on screen. */
 if (!reducedMotion && "IntersectionObserver" in window) {
