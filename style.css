@@ -273,8 +273,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 .speck svg { display: block; width: 100%; }
 @keyframes glimmer { 45% { opacity: 0.15; } 55% { opacity: 0.6; } }
 
-.moon { position: absolute; top: 8%; left: 16%; width: calc(10 * var(--px)); color: var(--trex); }
-.moon svg { display: block; width: 100%; }
+.night-moon { position: absolute; top: 8%; left: 16%; width: calc(10 * var(--px)); color: var(--trex); }
+.night-moon svg { display: block; width: 100%; }
 
 /* By day: clouds drifting right to left, a pixel at a time. */
 .clouds { position: absolute; inset: 0; pointer-events: none; }

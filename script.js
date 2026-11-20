@@ -395,7 +395,7 @@ clouds.className = "clouds";
 clouds.setAttribute("aria-hidden", "true");
 scene.prepend(sky, clouds);
 function scatter() {
-  sky.innerHTML = `<span class="moon">${sprite(moonRows)}</span>`;
+  sky.innerHTML = `<span class="night-moon">${sprite(moonRows)}</span>`;
   for (let i = 0; i < 20; i++) {
     const rows = speckRows[i % speckRows.length];
     const speck = document.createElement("span");
