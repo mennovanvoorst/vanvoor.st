@@ -171,17 +171,17 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 
 /* 404 */
 .lost { min-height: calc(100vh - var(--scene-h, 0px)); display: flex; flex-direction: column; justify-content: center; padding: 3rem 0; }
+.lost { position: relative; }
+.lost .toggles { top: 1rem; }
 .lost h1 { margin-bottom: 0.75rem; font: 700 1.6rem/1.15 var(--pixel); }
 
 /* Cursor trail */
 .trail { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
 
-/* Scene: a ground line stuck to the bottom of the screen, two old trees, and Chrome's T-Rex
-   wandering between them. Everything is drawn in "pixels" of --px. */
-:root { --px: 3px; --ground: 12px; }
-.has-scene body { padding-bottom: calc(var(--scene-h) + 1rem); }
-:root.has-scene { --scene-h: calc(76 * var(--px) + var(--ground)); }
-.scene { position: fixed; inset: auto 0 0; z-index: 20; height: 0; overflow-x: clip; color: var(--trex); pointer-events: none; }
+/* Scene: at the end of the page, a ground line and two old trees under a starry sky, with Chrome's
+   T-Rex wandering between them. Everything is drawn in "pixels" of --px. */
+:root { --px: 3px; --ground: 12px; --scene-h: calc(76 * var(--px) + var(--ground) + 3rem); }
+.scene { position: relative; height: var(--scene-h); margin-top: 1rem; overflow-x: clip; color: var(--trex); pointer-events: none; }
 .ground {
   position: absolute;
   inset: auto 0 0;
@@ -208,8 +208,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
   pointer-events: auto;
   cursor: pointer;
 }
-.tree.oak { left: 2vw; width: calc(72 * var(--px)); height: calc(64 * var(--px)); }
-.tree.elm { right: 3vw; width: calc(56 * var(--px)); height: calc(76 * var(--px)); }
+.tree.oak { left: max(2vw, calc(50% - 38rem)); width: calc(72 * var(--px)); height: calc(64 * var(--px)); }
+.tree.elm { right: max(3vw, calc(50% - 36rem)); width: calc(56 * var(--px)); height: calc(76 * var(--px)); }
 .tree.shaken { animation: rustle 0.4s steps(4); }
 @keyframes rustle {
   25%, 75% { transform: translateX(var(--px)); }
@@ -268,16 +268,16 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 @keyframes hop-left { from, to { transform: scaleX(-1); } 50% { transform: scaleX(-1) translateY(calc(-3 * var(--px))); } }
 
 /* The night sky: little stars that twinkle, just for looking at. */
-.night { position: fixed; inset: 0; pointer-events: none; }
+.night { position: absolute; inset: 0; pointer-events: none; }
 .speck { position: absolute; color: var(--trex); opacity: 0.6; animation: glimmer 5s steps(1) infinite; }
 .speck svg { display: block; width: 100%; }
 @keyframes glimmer { 45% { opacity: 0.15; } 55% { opacity: 0.6; } }
 
-/* The yellow star, top right. Don't click it. */
+/* The yellow star. Don't click it. */
 .star {
-  position: fixed;
-  top: 1.25rem;
-  right: 3vw;
+  position: absolute;
+  top: 0.5rem;
+  left: 62%;
   width: calc(9 * var(--px) + 12px);
   padding: 6px;
   border: 0;
@@ -333,20 +333,9 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
   80% { transform: translate(2px, 0); }
 }
 
-/* Smaller screens: smaller pixels, and the trees lean in from the edges. */
+/* Smaller screens: smaller pixels. */
 @media (max-width: 64rem) {
   :root { --px: 2px; }
-  .tree.oak { left: calc(-18 * var(--px)); }
-  .tree.elm { right: calc(-14 * var(--px)); }
-}
-/* Phones have no margins for the trees to stand in, so the scene sits at the end of the page instead. */
-@media (max-width: 56rem) {
-  .has-scene body { padding-bottom: 0; }
-  .scene { position: relative; height: var(--scene-h); margin-top: 1rem; }
-  .tree.oak { left: calc(-6 * var(--px)); }
-  .tree.elm { right: calc(-4 * var(--px)); }
-  .night { position: absolute; }
-  .star { position: absolute; top: 0; left: calc(50% - 4.5 * var(--px) - 6px); right: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {

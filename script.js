@@ -67,7 +67,7 @@ if (!reducedMotion && matchMedia("(pointer: fine)").matches) {
   }
 }
 
-/* At the bottom of the screen, Chrome's T-Rex (Chromium, BSD licence) wanders between two old trees.
+/* At the end of the page, Chrome's T-Rex (Chromium, BSD licence) wanders between two old trees.
    Say rawr and it says it back. Click the ground and it walks over; shake a tree and leaves fall.
    And then there's the star. */
 const fire = ["#f2542d", "#f5b700", "#ff8c42"];
@@ -353,12 +353,11 @@ const ground = scene.querySelector(".ground");
 const star = scene.querySelector(".star");
 const px = () => parseFloat(getComputedStyle(scene).getPropertyValue("--px")) || 3;
 
-// Scatter the sky: in the side margins on wide screens, above the trees on phones.
+// Scatter the sky above the trees.
 const sky = document.createElement("div");
 sky.className = "night";
 sky.setAttribute("aria-hidden", "true");
 scene.prepend(sky);
-const narrow = matchMedia("(max-width: 56rem)");
 function scatter() {
   sky.innerHTML = "";
   for (let i = 0; i < 20; i++) {
@@ -367,8 +366,8 @@ function scatter() {
     speck.className = "speck";
     speck.innerHTML = sprite(rows);
     speck.style.width = `calc(${rows[0].length} * var(--px))`;
-    const left = narrow.matches ? 3 + Math.random() * 92 : (i % 2 ? 81 : 2) + Math.random() * 16;
-    const top = narrow.matches ? 2 + Math.random() * 32 : 4 + Math.random() * 50;
+    const left = 2 + Math.random() * 95;
+    const top = 3 + Math.random() * 35;
     speck.style.left = `${left}%`;
     speck.style.top = `${top}%`;
     speck.style.animationDuration = `${3 + Math.random() * 4}s`;
@@ -377,7 +376,6 @@ function scatter() {
   }
 }
 scatter();
-narrow.addEventListener("change", scatter);
 const trexColor = () => getComputedStyle(scene).color;
 
 function labelStar() {
@@ -401,7 +399,7 @@ const rawr = () => say("rawr!");
 dino.addEventListener("click", () => (dino.classList.contains("crashed") ? say("…ow") : rawr()));
 
 /* Walking. The dino wanders to a random spot, stands around, repeats; unless it has somewhere to be. */
-const maxX = () => Math.max(0, innerWidth - dino.offsetWidth);
+const maxX = () => Math.max(0, scene.clientWidth - dino.offsetWidth);
 const dinoCenter = () => x + dino.offsetWidth / 2;
 let x = maxX() * (0.25 + Math.random() * 0.5);
 let target = x;
@@ -541,7 +539,7 @@ scene.querySelectorAll(".tree").forEach((tree) => {
 let falling = 0;
 function launch() {
   if (falling >= 3 || dino.classList.contains("crashed")) return;
-  // On phones the scene sits at the end of the page; bring it into view first.
+  // The scene sits at the end of the page; bring it into view first.
   const gr = ground.getBoundingClientRect();
   if (gr.top > innerHeight || gr.bottom < 0) {
     ground.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "end" });
@@ -734,6 +732,7 @@ const descriptions = {
   nl: "Software engineer en product builder bij Hilversum. Ik breng producten van de eerste schets tot productie, en AI doet een groot deel van het typwerk.",
 };
 const langButton = document.querySelector(".lang");
+const titles = { en: document.title, nl: document.documentElement.dataset.titleNl || document.title };
 
 function setLang(l) {
   document.documentElement.lang = l;
@@ -741,6 +740,7 @@ function setLang(l) {
   langButton.lang = l === "nl" ? "en" : "nl";
   langButton.setAttribute("aria-label", l === "nl" ? "Switch to English" : "Bekijk in het Nederlands");
   document.querySelector('meta[name="description"]')?.setAttribute("content", descriptions[l]);
+  document.title = titles[l];
 }
 
 if (langButton) {
@@ -787,9 +787,8 @@ if (themeButton) {
 }
 
 /* Miss me? */
-const title = document.title;
 document.addEventListener("visibilitychange", () => {
-  document.title = document.hidden ? (lang() === "nl" ? "🦕 rawr? kom terug" : "🦕 rawr? come back") : title;
+  document.title = document.hidden ? (lang() === "nl" ? "🦕 rawr? kom terug" : "🦕 rawr? come back") : titles[lang()];
 });
 
 console.log(
